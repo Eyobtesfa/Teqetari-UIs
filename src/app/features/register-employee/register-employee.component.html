@@ -1,0 +1,89 @@
+<div class="registration-container">
+  <h2>Employee Registration</h2>
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  <!-- Concept: Event Binding & Form Group Binding -->
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    
+    <div>
+      <label>Phone Number</label>
+      <input formControlName="phoneNumber" placeholder="0911223344" />
+      <!-- Concept: Form Validation State Checking -->
+      @if (form.controls.phoneNumber.touched && form.controls.phoneNumber.invalid) {
+        <span class="error-text">Valid Ethiopian phone number is required</span>
+      }
+    </div>
+
+    <div>
+      <label>First Name</label>
+      <input formControlName="firstName" />
+      @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
+        <span class="error-text">First Name is required</span>
+      }
+    </div>
+
+    <div>
+      <label>Last Name</label>
+      <input formControlName="lastName" />
+    </div>
+
+    <div>
+      <label>National ID Number</label>
+      <input formControlName="nationalIdNumber" />
+    </div>
+
+    <div>
+      <label>Job Category</label>
+      <select formControlName="jobCategory">
+  @for (category of jobCategories; track category.value) {
+    <option [value]="category.value">{{ category.label }}</option>
+  }
+</select>
+    </div>
+
+    <div>
+      <label>City</label>
+      <input formControlName="city" />
+    </div>
+
+    <div>
+      <label>SubCity</label>
+      <input formControlName="subCity" />
+    </div>
+
+    <div>
+      <label>Woreda</label>
+      <input formControlName="woreda" />
+    </div>
+
+    <div>
+      <label>Years of Experience</label>
+      <input type="number" formControlName="yearsOfExperience" />
+    </div>
+
+    <div>
+      <label>Expected Monthly Salary (ETB)</label>
+      <input type="number" formControlName="expectedSalary" />
+    </div>
+
+    <!-- Dynamic Skills Array -->
+    <div>
+      <label>Skills</label>
+      @for (control of skillsControls.controls; track $index) {
+        <div class="skill-row">
+          <input [formControl]="control" placeholder="e.g. Cooking, Childcare" />
+          <button type="button" (click)="removeSkill($index)">Remove</button>
+        </div>
+      }
+      <button type="button" (click)="addSkills()">+ Add Skill</button>
+    </div>
+
+    <button type="submit" [disabled]="isSubmitting()">
+      @if (isSubmitting()) { Registering... } @else { Submit Registration }
+    </button>
+
+  </form>
+</div>
