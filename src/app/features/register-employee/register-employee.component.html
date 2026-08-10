@@ -33,6 +33,18 @@
     <div>
       <label>National ID Number</label>
       <input formControlName="nationalIdNumber" />
+      @if (
+    (form.controls.nationalIdNumber.touched || form.controls.nationalIdNumber.dirty) && 
+    form.controls.nationalIdNumber.invalid
+  ) {
+    <span class="error-text">
+      @if (form.controls.nationalIdNumber.errors?.['required']) {
+        National ID is required.
+      } @else if (form.controls.nationalIdNumber.errors?.['pattern']) {
+        National ID must be exactly 16 digits.
+      }
+    </span>
+  }
     </div>
 
     <div>

@@ -12,4 +12,9 @@ export const routes: Routes = [
         loadComponent: () =>
             import('./features/register-employee/register-employee.component').then((m) => m.RegisterEmployeeComponent),
     },
+    {
+        path: 'register-employer',
+        loadComponent: () =>
+            import('./features/register-employer/register-employer.component').then((m) => m.RegisterEmployerComponent),
+    }
 ];

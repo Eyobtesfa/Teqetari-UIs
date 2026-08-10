@@ -1,0 +1,122 @@
+/* Container & Background */
+.landing-container {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 3rem 2rem;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Header & Typography */
+.landing-container h1 {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.landing-container p {
+  font-size: 1.15rem;
+  color: #64748b;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Cards Grid Layout */
+.action-cards {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .action-cards {
+    flex-direction: column;
+  }
+}
+
+/* Individual Action Card */
+.card {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #cbd5e1;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.card p {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+/* Base Button Style */
+.btn {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Primary Button (Employee) */
+.btn-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: 1px solid #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+/* Secondary Button (Employer) */
+.btn-secondary {
+  background-color: #0f172a;
+  color: #ffffff;
+  border: 1px solid #0f172a;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+}
+
+.btn-secondary:hover {
+  background-color: #1e293b;
+  border-color: #1e293b;
+}

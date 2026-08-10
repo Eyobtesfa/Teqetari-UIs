@@ -3,14 +3,15 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormArray, FormControl } 
 import { Router } from "@angular/router";
 import { EmployeeService } from "../../services/employee";
 import { CreateEmployee } from "../../Models/employee.model";
-import { JobCategory } from "../../Models/job-category.enum";
+import { JobCategory } from "../../Models/enum/job-category.enum";
 
 
 @Component({
   selector: 'app-register-employee',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './register-employee.component.html'
+  templateUrl: './register-employee.component.html',
+  styleUrl: './register-employee.component.scss'
 })
 export class RegisterEmployeeComponent{
   private fb = inject(FormBuilder);
@@ -30,13 +31,13 @@ export class RegisterEmployeeComponent{
   { value: JobCategory.SecurityGuarding, label: 'SecurityGuarding' },
   { value: JobCategory.ElderlyCareProvider, label: 'ElderlyCareProvider' },
   { value: JobCategory.PetCareProvider, label: 'PetCareProvider' },
-];;
+];
 
   form = this.fb.nonNullable.group({
-    phoneNumber: ['', [Validators.required, Validators.pattern('^09[0-9]{8}$')]],
+    phoneNumber: ['', [Validators.required, Validators.pattern('^(\\+251|251|0)(9|7)\\d{8}$')]],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    nationalIdNumber: ['', Validators.required],
+    nationalIdNumber: ['', Validators.required, Validators.pattern('^\\d{16}$')],
     email: [''], // Optional
     city: ['Addis Ababa', Validators.required],
     subCity: ['', Validators.required],
@@ -70,7 +71,7 @@ export class RegisterEmployeeComponent{
 
     const raw = this.form.getRawValue();
   
-  // Format payload ensuring correct types and handling optional nullables
+  
   const payload: CreateEmployee = {
     ...raw,
     email: raw.email?.trim() ? raw.email.trim() : null,
@@ -87,7 +88,7 @@ export class RegisterEmployeeComponent{
     this.isSubmitting.set(false);
     console.error('Validation errors:', err.error?.errors);
 
-    // If ASP.NET returns validation errors, format and display them
+    
     if (err.error?.errors) {
       const messages = Object.entries(err.error.errors)
         .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`)

@@ -1,0 +1,323 @@
+<div class="registration-container">
+  
+  <header class="form-header">
+    <h1>Register as an Employer</h1>
+    <p>Select your category to begin the registration process.</p>
+  </header>
+
+  @if (errorMessage()) {
+    <div class="error-banner" role="alert">
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (selectedEmployerType() === null) {
+    <div class="category-grid">
+      <button 
+        type="button" 
+        class="category-card" 
+        (click)="onSelectEmployerType(EmployerType.Household)"
+      >
+        <div class="icon">🏠</div>
+        <h2>Household</h2>
+        <p>Register to hire domestic staff, cooks, drivers, or child care providers for your personal home.</p>
+      </button>
+
+      <button 
+        type="button" 
+        class="category-card" 
+        (click)="onSelectEmployerType(EmployerType.PrivateCompany)"
+      >
+        <div class="icon">🏢</div>
+        <h2>Private Company</h2>
+        <p>Register as a business or commercial enterprise hiring corporate staff or agency workers.</p>
+      </button>
+
+      <button 
+        type="button" 
+        class="category-card" 
+        (click)="onSelectEmployerType(EmployerType.GovernmentOrganization)"
+      >
+        <div class="icon">🏛️</div>
+        <h2>Government Org</h2>
+        <p>Register as a federal or regional public sector institution hiring authorized personnel.</p>
+      </button>
+    </div>
+  }
+
+  @else {
+    <form [formGroup]="form" (ngSubmit)="submit()" class="employer-form">
+      
+      <div class="form-actions-top">
+        <button type="button" class="btn-back" (click)="selectedEmployerType.set(null)">
+          ← Switch Employer Type
+        </button>
+        <span class="active-badge">
+          @if (selectedEmployerType() === EmployerType.Household) { Household Employer }
+          @if (selectedEmployerType() === EmployerType.PrivateCompany) { Private Company }
+          @if (selectedEmployerType() === EmployerType.GovernmentOrganization) { Government Organization }
+        </span>
+      </div>
+
+      <!-- Base Fields Section -->
+      <section class="form-section">
+        <h3>Contact & Location Details</h3>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input id="email" type="email" formControlName="email" placeholder="name@domain.com" />
+            @if (form.controls.email.invalid && form.controls.email.touched) {
+              <span class="field-error">Please enter a valid email address.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number <span class="required">*</span></label>
+            <input id="phoneNumber" type="tel" formControlName="phoneNumber" placeholder="0911223344" />
+            @if (form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched) {
+              <span class="field-error">Must start with 09 and contain 10 digits.</span>
+            }
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="form-group">
+            <label for="city">City <span class="required">*</span></label>
+            <input id="city" type="text" formControlName="city" />
+            @if (form.controls.city.invalid && form.controls.city.touched) {
+              <span class="field-error">City is required.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="subCity">Sub-City <span class="required">*</span></label>
+            <input id="subCity" type="text" formControlName="subCity" placeholder="e.g. Bole" />
+            @if (form.controls.subCity.invalid && form.controls.subCity.touched) {
+              <span class="field-error">Sub-city is required.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="woreda">Woreda <span class="required">*</span></label>
+            <input id="woreda" type="text" formControlName="woreda" placeholder="e.g. 03" />
+            @if (form.controls.woreda.invalid && form.controls.woreda.touched) {
+              <span class="field-error">Woreda is required.</span>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Household Section -->
+      @if (selectedEmployerType() === EmployerType.Household) {
+        <section class="form-section subtype-section">
+          <h3>Household Specific Information</h3>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="firstName">First Name <span class="required">*</span></label>
+              <input id="firstName" type="text" formControlName="firstName" />
+              @if (form.controls.firstName.invalid && form.controls.firstName.touched) {
+                <span class="field-error">First name is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Last Name <span class="required">*</span></label>
+              <input id="lastName" type="text" formControlName="lastName" />
+              @if (form.controls.lastName.invalid && form.controls.lastName.touched) {
+                <span class="field-error">Last name is required.</span>
+              }
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="nationalIdNumber">National / Kebele ID Number <span class="required">*</span></label>
+              <input id="nationalIdNumber" type="text" formControlName="nationalIdNumber" />
+              @if (form.controls.nationalIdNumber.invalid && form.controls.nationalIdNumber.touched) {
+                <span class="field-error">National ID is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="numberOfFamilyMembers">Number of Family Members <span class="required">*</span></label>
+              <input id="numberOfFamilyMembers" type="number" min="1" formControlName="numberOfFamilyMembers" />
+              @if (form.controls.numberOfFamilyMembers.invalid && form.controls.numberOfFamilyMembers.touched) {
+                <span class="field-error">Must be at least 1 member.</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="hasPets" />
+              <span>Household has pets on premises</span>
+            </label>
+          </div>
+        </section>
+      }
+
+      <!-- Private Company Section -->
+      @if (selectedEmployerType() === EmployerType.PrivateCompany) {
+        <section class="form-section subtype-section">
+          <h3>Company Information</h3>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="companyName">Company Legal Name <span class="required">*</span></label>
+              <input id="companyName" type="text" formControlName="companyName" />
+              @if (form.controls.companyName.invalid && form.controls.companyName.touched) {
+                <span class="field-error">Company name is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="tradeLicenseNummber">Trade License Number <span class="required">*</span></label>
+              <input id="tradeLicenseNummber" type="text" formControlName="tradeLicenseNummber" />
+              @if (form.controls.tradeLicenseNummber.invalid && form.controls.tradeLicenseNummber.touched) {
+                <span class="field-error">Trade license number is required.</span>
+              }
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="form-group">
+              <label for="taxRegistrationNumber">TIN Number <span class="required">*</span></label>
+              <input id="taxRegistrationNumber" type="text" formControlName="taxRegistrationNumber" placeholder="10 digits" />
+              @if (form.controls.taxRegistrationNumber.invalid && form.controls.taxRegistrationNumber.touched) {
+                <span class="field-error">TIN number must be 10 digits.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="industryType">Industry Sector <span class="required">*</span></label>
+              <select id="industryType" formControlName="industryType">
+                <option [ngValue]="IndustryType.HospitalityAndHotels">Hospitality & Hotels</option>
+                <option [ngValue]="IndustryType.RetailAndWholesale">Retail & Wholesale</option>
+                <option [ngValue]="IndustryType.ConstructionAndRealEstate">Construction & Real Estate</option>
+                <option [ngValue]="IndustryType.ManufacturingAndLogistics">Manufacturing & Logistics</option>
+                <option [ngValue]="IndustryType.HealthCareAndMedical">Health Care & Medical</option>
+                <option [ngValue]="IndustryType.BankingAndFinance">Banking & Finance</option>
+                <option [ngValue]="IndustryType.TechnologyAndIT">Technology & IT</option>
+                <option [ngValue]="IndustryType.EducationAndSchools">Education & Schools</option>
+                <option [ngValue]="IndustryType.OtherCorporate">Other Corporate</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="companySize">Company Size <span class="required">*</span></label>
+              <select id="companySize" formControlName="companySize">
+                <option [ngValue]="CompanySize.Micro_1_To_10">Micro (1 to 10)</option>
+                <option [ngValue]="CompanySize.Small_11_To_50">Small (11 to 50)</option>
+                <option [ngValue]="CompanySize.Medium_51_To_250">Medium (51 to 250)</option>
+                <option [ngValue]="CompanySize.Large_251_Plus">Large (251+)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="contactPersonName">Contact Person Name <span class="required">*</span></label>
+              <input id="contactPersonName" type="text" formControlName="contactPersonName" />
+              @if (form.controls.contactPersonName.invalid && form.controls.contactPersonName.touched) {
+                <span class="field-error">Contact person name is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="contactPersonRole">Contact Person Role <span class="required">*</span></label>
+              <input id="contactPersonRole" type="text" formControlName="contactPersonRole" placeholder="e.g. HR Manager" />
+              @if (form.controls.contactPersonRole.invalid && form.controls.contactPersonRole.touched) {
+                <span class="field-error">Designation is required.</span>
+              }
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- Government Organization Section -->
+      @if (selectedEmployerType() === EmployerType.GovernmentOrganization) {
+        <section class="form-section subtype-section">
+          <h3>Government Institution Details</h3>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="organizationName">Organization Name <span class="required">*</span></label>
+              <input id="organizationName" type="text" formControlName="organizationName" />
+              @if (form.controls.organizationName.invalid && form.controls.organizationName.touched) {
+                <span class="field-error">Organization name is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="department">Department / Bureau <span class="required">*</span></label>
+              <input id="department" type="text" formControlName="department" />
+              @if (form.controls.department.invalid && form.controls.department.touched) {
+                <span class="field-error">Department name is required.</span>
+              }
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="form-group">
+              <label for="authorizedOfficerName">Authorized Officer Name <span class="required">*</span></label>
+              <input id="authorizedOfficerName" type="text" formControlName="authorizedOfficerName" />
+              @if (form.controls.authorizedOfficerName.invalid && form.controls.authorizedOfficerName.touched) {
+                <span class="field-error">Officer name is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="officialLetterNumber">Official Letter Reference # <span class="required">*</span></label>
+              <input id="officialLetterNumber" type="text" formControlName="officialLetterNumber" />
+              @if (form.controls.officialLetterNumber.invalid && form.controls.officialLetterNumber.touched) {
+                <span class="field-error">Reference number is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="governmentSector">Government Sector <span class="required">*</span></label>
+              <select id="governmentSector" formControlName="governmentSector">
+                <option [ngValue]="GovernmentSector.AdministrativeAndMinistries">Administrative & Ministries</option>
+                <option [ngValue]="GovernmentSector.HealthcareAndPublicHospitals">Healthcare & Public Hospitals</option>
+                <option [ngValue]="GovernmentSector.EducationAndPublicSchools">Education & Public Schools</option>
+                <option [ngValue]="GovernmentSector.LawEnforcementAndSecurity">Law Enforcement & Security</option>
+                <option [ngValue]="GovernmentSector.InfrastructureAndUtilities">Infrastructure & Utilities</option>
+                <option [ngValue]="GovernmentSector.MunicipalAndLocalRegistry">Municipal & Local Registry</option>
+              </select>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- Special Instructions -->
+      <section class="form-section">
+        <h3>Special Instructions & Work Requirements</h3>
+        <p class="section-desc">Add any specific guidelines, shift requirements, or working rules.</p>
+
+        <div formArrayName="specialInstructions" class="instructions-list">
+          @for (control of instructionsControls.controls; track $index) {
+            <div class="instruction-row">
+              <input [formControlName]="$index" placeholder="e.g. Working hours 8:00 AM - 5:00 PM" />
+              <button type="button" class="btn-remove" (click)="removeInstruction($index)">Remove</button>
+            </div>
+          }
+        </div>
+
+        <button type="button" class="btn-secondary" (click)="addInstruction()">
+          + Add Special Instruction
+        </button>
+      </section>
+
+      <!-- Submit Button -->
+      <div class="form-footer">
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Processing Registration...' : 'Complete Registration' }}
+        </button>
+      </div>
+
+    </form>
+  }
+
+</div>

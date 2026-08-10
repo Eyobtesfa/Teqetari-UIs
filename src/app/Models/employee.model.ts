@@ -1,4 +1,4 @@
-import { JobCategory } from "./job-category.enum";
+import { JobCategory } from "./enum/job-category.enum";
 export interface CreateEmployee{
     firstName: string;
     lastName: string;
