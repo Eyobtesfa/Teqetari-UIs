@@ -8,11 +8,12 @@ export interface CreateEmployer{
     city: string;
     subCity: string;
     woreda: string;
-    specialInstructions?: string[] | null;
+    specialInstruction?: string[] | null;
     employerType: EmployerType;
 }
 
 export interface CreateHouseholdEmplloyer extends CreateEmployer{
+    '$type' : 'Household';
     firstName: string;
     lastName: string;
     nationalIdNumber: string;
@@ -22,23 +23,25 @@ export interface CreateHouseholdEmplloyer extends CreateEmployer{
 }
 
 export interface CreateCompanyEmployer extends CreateEmployer{
+    '$type': 'PrivateCompany';
     companyName: string;
-    tradeLicenseNummber: string;
+    tradeLicenseNumber: string;
     taxRegistrationNumber: string;
     contactPersonName: string;
     contactPersonRole: string;
     employerType: EmployerType.PrivateCompany;
-    industryType: IndustryType;
+    industry: IndustryType;
     companySize: CompanySize
 }
 
 export interface CreateGovernmentEmployer extends CreateEmployer{
+    '$type': 'GovernmentOrganization';
     organizationName: string;
     department: string;
     authorizedOfficerName: string;
-    officialLetterNumber: string;
+    officialLetterRefNumber: string;
     employerType: EmployerType.GovernmentOrganization;
-    governmentSetor: GovernmentSector
+    sector: GovernmentSector
 }
 
 export type CreateEmployerPayload = CreateHouseholdEmplloyer | CreateCompanyEmployer | CreateGovernmentEmployer;

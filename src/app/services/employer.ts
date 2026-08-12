@@ -17,16 +17,10 @@ export interface EmployerResponse {
 export class EmployerService {
   private http = inject(HttpClient);
   
-  // Update base URL to match your backend port configuration
+  
   private baseUrl = 'http://localhost:5134/api/employers';
 
-  /**
-   * Sends a polymorphic employer registration request to the backend.
-   * Handles Household, PrivateCompany, and GovernmentOrganization payloads.
-   * 
-   * @param dto CreateEmployerPayload (Union of Household, Company, or Government models)
-   * @returns Observable<EmployerResponse>
-   */
+
   registerEmployer(dto: CreateEmployerPayload): Observable<EmployerResponse> {
     return this.http.post<EmployerResponse>(this.baseUrl, dto);
   }

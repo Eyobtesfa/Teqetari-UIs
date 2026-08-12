@@ -173,9 +173,9 @@
             </div>
 
             <div class="form-group">
-              <label for="tradeLicenseNummber">Trade License Number <span class="required">*</span></label>
-              <input id="tradeLicenseNummber" type="text" formControlName="tradeLicenseNummber" />
-              @if (form.controls.tradeLicenseNummber.invalid && form.controls.tradeLicenseNummber.touched) {
+              <label for="tradeLicenseNumber">Trade License Number <span class="required">*</span></label>
+              <input id="tradeLicenseNumber" type="text" formControlName="tradeLicenseNumber" />
+              @if (form.controls.tradeLicenseNumber.invalid && form.controls.tradeLicenseNumber.touched) {
                 <span class="field-error">Trade license number is required.</span>
               }
             </div>
@@ -296,7 +296,7 @@
         <h3>Special Instructions & Work Requirements</h3>
         <p class="section-desc">Add any specific guidelines, shift requirements, or working rules.</p>
 
-        <div formArrayName="specialInstructions" class="instructions-list">
+        <div formArrayName="specialInstruction" class="instructions-list">
           @for (control of instructionsControls.controls; track $index) {
             <div class="instruction-row">
               <input [formControlName]="$index" placeholder="e.g. Working hours 8:00 AM - 5:00 PM" />

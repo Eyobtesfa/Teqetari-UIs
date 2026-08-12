@@ -44,7 +44,7 @@ export class RegisterEmployerComponent {
     city: ['Addis Ababa', Validators.required],
     subCity: ['', Validators.required],
     woreda: ['', Validators.required],
-    specialInstructions: this.fb.array<FormControl<string>>([]),
+    specialInstruction: this.fb.array<FormControl<string>>([]),
 
     // Household
     firstName: [''],
@@ -55,7 +55,7 @@ export class RegisterEmployerComponent {
 
     // Private Company
     companyName: [''],
-    tradeLicenseNummber: [''],
+    tradeLicenseNumber: [''],
     taxRegistrationNumber: [''],
     contactPersonName: [''],
     contactPersonRole: [''],
@@ -71,7 +71,7 @@ export class RegisterEmployerComponent {
   });
 
   get instructionsControls(): FormArray<FormControl<string>> {
-    return this.form.controls.specialInstructions;
+    return this.form.controls.specialInstruction;
   }
 
   addInstruction(): void {
@@ -96,7 +96,7 @@ export class RegisterEmployerComponent {
 
     } else if (type === EmployerType.PrivateCompany) {
       this.form.controls.companyName.setValidators([Validators.required]);
-      this.form.controls.tradeLicenseNummber.setValidators([Validators.required]);
+      this.form.controls.tradeLicenseNumber.setValidators([Validators.required]);
       this.form.controls.taxRegistrationNumber.setValidators([
         Validators.required,
         Validators.pattern('^[0-9]{10}$')
@@ -135,14 +135,16 @@ export class RegisterEmployerComponent {
       city: raw.city.trim(),
       subCity: raw.subCity.trim(),
       woreda: raw.woreda.trim(),
-      specialInstructions: raw.specialInstructions.filter(i => i.trim() !== '')
+      specialInstruction: raw.specialInstruction.filter(i => i.trim() !== '')
     };
 
     let payload: CreateEmployerPayload;
 
     if (activeType === EmployerType.Household) {
       payload = {
+        '$type': 'Household',
         ...basePayload,
+        
         employerType: EmployerType.Household,
         firstName: raw.firstName.trim(),
         lastName: raw.lastName.trim(),
@@ -153,26 +155,30 @@ export class RegisterEmployerComponent {
 
     } else if (activeType === EmployerType.PrivateCompany) {
       payload = {
+        '$type': 'PrivateCompany',
         ...basePayload,
+        
         employerType: EmployerType.PrivateCompany,
         companyName: raw.companyName.trim(),
-        tradeLicenseNummber: raw.tradeLicenseNummber.trim(),
+        tradeLicenseNumber: raw.tradeLicenseNumber.trim(),
         taxRegistrationNumber: raw.taxRegistrationNumber.trim(),
         contactPersonName: raw.contactPersonName.trim(),
         contactPersonRole: raw.contactPersonRole.trim(),
-        industryType: Number(raw.industryType),
+        industry: Number(raw.industryType),
         companySize: Number(raw.companySize)
       };
 
     } else {
       payload = {
+        '$type': 'GovernmentOrganization',
         ...basePayload,
+        
         employerType: EmployerType.GovernmentOrganization,
         organizationName: raw.organizationName.trim(),
         department: raw.department.trim(),
         authorizedOfficerName: raw.authorizedOfficerName.trim(),
-        officialLetterNumber: raw.officialLetterNumber.trim(),
-        governmentSetor: Number(raw.governmentSector)
+        officialLetterRefNumber: raw.officialLetterNumber.trim(),
+        sector: Number(raw.governmentSector)
       };
     }
 
@@ -197,7 +203,7 @@ export class RegisterEmployerComponent {
     c.numberOfFamilyMembers.clearValidators();
 
     c.companyName.clearValidators();
-    c.tradeLicenseNummber.clearValidators();
+    c.tradeLicenseNumber.clearValidators();
     c.taxRegistrationNumber.clearValidators();
     c.contactPersonName.clearValidators();
     c.contactPersonRole.clearValidators();
