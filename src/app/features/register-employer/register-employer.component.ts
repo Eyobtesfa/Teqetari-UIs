@@ -1,226 +1,176 @@
-import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import {
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-  FormArray,
-  FormControl
-} from '@angular/forms';
-import { Router } from '@angular/router';
-
-import { EmployerService } from '../../services/employer';
-import { EmployerType } from '../../Models/enum/employer-type.enum';
-import { IndustryType } from '../../Models/enum/industry-type.enum';
-import { CompanySize } from '../../Models/enum/company-size.enum';
-import { GovernmentSector } from '../../Models/enum/government-sector.enum';
-import { CreateEmployerPayload } from '../../Models/employer.model';
+  ApiErrorResponse,
+  CreateCompanyEmployerDto,
+  CreateEmployerDto,
+  CreateGovernmentEmployerDto,
+  CreateHouseholdEmployerDto,
+  EmployerKind,
+} from '../../Models/auth.model';
 
 @Component({
   selector: 'app-register-employer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register-employer.component.html',
-  styleUrl: './register-employer.component.scss'
+  styleUrl: './register-employer.component.css',
 })
 export class RegisterEmployerComponent {
+  // CHANGED: inject() instead of constructor params — see login.component.ts for why.
   private fb = inject(FormBuilder);
-  private employerService = inject(EmployerService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
-  EmployerType = EmployerType;
-  IndustryType = IndustryType;
-  CompanySize = CompanySize;
-  GovernmentSector = GovernmentSector;
+  readonly isSubmitting = signal(false);
+  readonly errorMessages = signal<string[]>([]);
+  readonly selectedType = signal<EmployerKind>('Household');
 
-  selectedEmployerType = signal<EmployerType | null>(null);
-  isSubmitting = signal(false);
-  errorMessage = signal<string | null>(null);
-
-  form = this.fb.nonNullable.group({
-    // Base Fields
+  // Fields common to every employer type.
+  readonly commonForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    phoneNumber: ['', [Validators.required, Validators.pattern('^09[0-9]{8}$')]],
-    city: ['Addis Ababa', Validators.required],
+    phoneNumber: ['', [Validators.required, Validators.pattern(/^0\d{9}$/)]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    city: ['', Validators.required],
     subCity: ['', Validators.required],
     woreda: ['', Validators.required],
-    specialInstruction: this.fb.array<FormControl<string>>([]),
-
-    // Household
-    firstName: [''],
-    lastName: [''],
-    nationalIdNumber: [''],
-    numberOfFamilyMembers: [1],
-    hasPets: [false],
-
-    // Private Company
-    companyName: [''],
-    tradeLicenseNumber: [''],
-    taxRegistrationNumber: [''],
-    contactPersonName: [''],
-    contactPersonRole: [''],
-    industryType: [IndustryType.OtherCorporate as IndustryType],
-    companySize: [CompanySize.Micro_1_To_10 as CompanySize],
-
-    // Government Organization
-    organizationName: [''],
-    department: [''],
-    authorizedOfficerName: [''],
-    officialLetterNumber: [''],
-    governmentSector: [GovernmentSector.AdministrativeAndMinistries as GovernmentSector]
+    specialInstruction: [''],
   });
 
-  get instructionsControls(): FormArray<FormControl<string>> {
-    return this.form.controls.specialInstruction;
-  }
+  // One form per subtype — only the active one is validated/submitted.
+  readonly householdForm = this.fb.group({
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    nationalIdNumber: ['', Validators.required],
+    numberOfFamilyMembers: [1, [Validators.required, Validators.min(1)]],
+    hasPets: [false],
+  });
 
-  addInstruction(): void {
-    this.instructionsControls.push(
-      this.fb.control('', { nonNullable: true, validators: Validators.required })
-    );
-  }
+  readonly companyForm = this.fb.group({
+    companyName: ['', Validators.required],
+    industry: ['', Validators.required],
+    tradeLicenseNumber: ['', Validators.required],
+    taxRegistrationNumber: ['', Validators.required],
+    contactPersonName: ['', Validators.required],
+    contactPersonRole: ['', Validators.required],
+    companySize: [1, [Validators.required, Validators.min(1)]],
+  });
 
-  removeInstruction(index: number): void {
-    this.instructionsControls.removeAt(index);
-  }
+  readonly governmentForm = this.fb.group({
+    organizationName: ['', Validators.required],
+    sector: ['', Validators.required],
+    department: ['', Validators.required],
+    authorizedOfficerName: ['', Validators.required],
+    officialLetterRefNumber: ['', Validators.required],
+  });
 
-  onSelectEmployerType(type: EmployerType): void {
-    this.selectedEmployerType.set(type);
-    this.clearDerivedValidators();
-
-    if (type === EmployerType.Household) {
-      this.form.controls.firstName.setValidators([Validators.required]);
-      this.form.controls.lastName.setValidators([Validators.required]);
-      this.form.controls.nationalIdNumber.setValidators([Validators.required]);
-      this.form.controls.numberOfFamilyMembers.setValidators([Validators.required, Validators.min(1)]);
-
-    } else if (type === EmployerType.PrivateCompany) {
-      this.form.controls.companyName.setValidators([Validators.required]);
-      this.form.controls.tradeLicenseNumber.setValidators([Validators.required]);
-      this.form.controls.taxRegistrationNumber.setValidators([
-        Validators.required,
-        Validators.pattern('^[0-9]{10}$')
-      ]);
-      this.form.controls.contactPersonName.setValidators([Validators.required]);
-      this.form.controls.contactPersonRole.setValidators([Validators.required]);
-      this.form.controls.industryType.setValidators([Validators.required]);
-      this.form.controls.companySize.setValidators([Validators.required]);
-
-    } else if (type === EmployerType.GovernmentOrganization) {
-      this.form.controls.organizationName.setValidators([Validators.required]);
-      this.form.controls.department.setValidators([Validators.required]);
-      this.form.controls.authorizedOfficerName.setValidators([Validators.required]);
-      this.form.controls.officialLetterNumber.setValidators([Validators.required]);
-      this.form.controls.governmentSector.setValidators([Validators.required]);
-    }
-
-    this.updateDerivedValidity();
+  selectType(type: EmployerKind): void {
+    this.selectedType.set(type);
+    this.errorMessages.set([]);
   }
 
   submit(): void {
-    if (this.form.invalid || this.selectedEmployerType() === null) {
-      this.form.markAllAsTouched();
+    const typeForm = this.currentTypeForm();
+
+    if (this.commonForm.invalid || typeForm.invalid) {
+      this.commonForm.markAllAsTouched();
+      typeForm.markAllAsTouched();
       return;
     }
 
+    this.errorMessages.set([]);
     this.isSubmitting.set(true);
-    this.errorMessage.set(null);
 
-    const raw = this.form.getRawValue();
-    const activeType = this.selectedEmployerType()!;
+    const dto = this.buildDto();
 
-    const basePayload = {
-      email: raw.email.trim(),
-      phoneNumber: raw.phoneNumber.trim(),
-      city: raw.city.trim(),
-      subCity: raw.subCity.trim(),
-      woreda: raw.woreda.trim(),
-      specialInstruction: raw.specialInstruction.filter(i => i.trim() !== '')
-    };
-
-    let payload: CreateEmployerPayload;
-
-    if (activeType === EmployerType.Household) {
-      payload = {
-        '$type': 'Household',
-        ...basePayload,
-        
-        employerType: EmployerType.Household,
-        firstName: raw.firstName.trim(),
-        lastName: raw.lastName.trim(),
-        nationalIdNumber: raw.nationalIdNumber.trim(),
-        numberOfFamilyMembers: Number(raw.numberOfFamilyMembers),
-        hasPets: Boolean(raw.hasPets)
-      };
-
-    } else if (activeType === EmployerType.PrivateCompany) {
-      payload = {
-        '$type': 'PrivateCompany',
-        ...basePayload,
-        
-        employerType: EmployerType.PrivateCompany,
-        companyName: raw.companyName.trim(),
-        tradeLicenseNumber: raw.tradeLicenseNumber.trim(),
-        taxRegistrationNumber: raw.taxRegistrationNumber.trim(),
-        contactPersonName: raw.contactPersonName.trim(),
-        contactPersonRole: raw.contactPersonRole.trim(),
-        industry: Number(raw.industryType),
-        companySize: Number(raw.companySize)
-      };
-
-    } else {
-      payload = {
-        '$type': 'GovernmentOrganization',
-        ...basePayload,
-        
-        employerType: EmployerType.GovernmentOrganization,
-        organizationName: raw.organizationName.trim(),
-        department: raw.department.trim(),
-        authorizedOfficerName: raw.authorizedOfficerName.trim(),
-        officialLetterRefNumber: raw.officialLetterNumber.trim(),
-        sector: Number(raw.governmentSector)
-      };
-    }
-
-    this.employerService.registerEmployer(payload).subscribe({
+    this.authService.registerEmployer(dto).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        this.router.navigate(['/landing']);
+        this.router.navigate(['/login']);
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         this.isSubmitting.set(false);
-        this.errorMessage.set('Registration failed. Please check inputs.');
+        this.errorMessages.set(this.extractErrors(err));
+      },
+    });
+  }
+
+  private currentTypeForm() {
+    switch (this.selectedType()) {
+      case 'Household':
+        return this.householdForm;
+      case 'PrivateCompany':
+        return this.companyForm;
+      case 'GovernmentOrganization':
+        return this.governmentForm;
+    }
+  }
+
+  private buildDto(): CreateEmployerDto {
+    const common = this.commonForm.getRawValue();
+    const base = {
+      email: common.email!,
+      phoneNumber: common.phoneNumber!,
+      password: common.password!,
+      city: common.city!,
+      subCity: common.subCity!,
+      woreda: common.woreda!,
+      specialInstruction: common.specialInstruction || undefined,
+      employerType: this.selectedType(),
+    };
+
+    switch (this.selectedType()) {
+      case 'Household': {
+        const v = this.householdForm.getRawValue();
+        const dto: CreateHouseholdEmployerDto = {
+          $type: 'Household',
+          ...base,
+          firstName: v.firstName!,
+          lastName: v.lastName!,
+          nationalIdNumber: v.nationalIdNumber!,
+          numberOfFamilyMembers: Number(v.numberOfFamilyMembers),
+          hasPets: !!v.hasPets,
+        };
+        return dto;
       }
-    });
+      case 'PrivateCompany': {
+        const v = this.companyForm.getRawValue();
+        const dto: CreateCompanyEmployerDto = {
+          $type: 'PrivateCompany',
+          ...base,
+          companyName: v.companyName!,
+          industry: v.industry!,
+          tradeLicenseNumber: v.tradeLicenseNumber!,
+          taxRegistrationNumber: v.taxRegistrationNumber!,
+          contactPersonName: v.contactPersonName!,
+          contactPersonRole: v.contactPersonRole!,
+          companySize: Number(v.companySize),
+        };
+        return dto;
+      }
+      case 'GovernmentOrganization': {
+        const v = this.governmentForm.getRawValue();
+        const dto: CreateGovernmentEmployerDto = {
+          $type: 'GovernmentOrganization',
+          ...base,
+          organizationName: v.organizationName!,
+          sector: v.sector!,
+          department: v.department!,
+          authorizedOfficerName: v.authorizedOfficerName!,
+          officialLetterRefNumber: v.officialLetterRefNumber!,
+        };
+        return dto;
+      }
+    }
   }
 
-  private clearDerivedValidators(): void {
-    const c = this.form.controls;
-
-    c.firstName.clearValidators();
-    c.lastName.clearValidators();
-    c.nationalIdNumber.clearValidators();
-    c.numberOfFamilyMembers.clearValidators();
-
-    c.companyName.clearValidators();
-    c.tradeLicenseNumber.clearValidators();
-    c.taxRegistrationNumber.clearValidators();
-    c.contactPersonName.clearValidators();
-    c.contactPersonRole.clearValidators();
-    c.industryType.clearValidators();
-    c.companySize.clearValidators();
-
-    c.organizationName.clearValidators();
-    c.department.clearValidators();
-    c.authorizedOfficerName.clearValidators();
-    c.officialLetterNumber.clearValidators();
-    c.governmentSector.clearValidators();
-  }
-
-  private updateDerivedValidity(): void {
-    const c = this.form.controls;
-    Object.keys(c).forEach(key => {
-      c[key as keyof typeof c].updateValueAndValidity();
-    });
+  private extractErrors(err: HttpErrorResponse): string[] {
+    const body = err.error as ApiErrorResponse | undefined;
+    if (body?.errors?.length) return body.errors;
+    return [body?.errorMessage ?? body?.title ?? 'Registration failed. Please try again.'];
   }
 }

@@ -1,103 +1,88 @@
-import { Component, inject, signal } from "@angular/core";
-import { FormBuilder, Validators, ReactiveFormsModule, FormArray, FormControl } from "@angular/forms";
-import { Router } from "@angular/router";
-import { EmployeeService } from "../../services/employee";
-import { CreateEmployee } from "../../Models/employee.model";
-import { JobCategory } from "../../Models/enum/job-category.enum";
-
+import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { ApiErrorResponse, JOB_CATEGORIES } from '../../Models/auth.model';
 
 @Component({
   selector: 'app-register-employee',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register-employee.component.html',
-  styleUrl: './register-employee.component.scss'
+  styleUrl: './register-employee.component.css',
 })
-export class RegisterEmployeeComponent{
+export class RegisterEmployeeComponent {
+  // CHANGED: inject() instead of constructor params — see login.component.ts for why.
   private fb = inject(FormBuilder);
-  private employeeService = inject(EmployeeService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
-  isSubmitting = signal(false);
-  errorMessage = signal<string | null>(null);
+  readonly isSubmitting = signal(false);
+  readonly errorMessages = signal<string[]>([]);
+  readonly jobCategories = JOB_CATEGORIES;
 
-  jobCategories = [
-  { value: JobCategory.Maid, label: 'Maid' },
-  { value: JobCategory.ChildCareProvide, label: 'ChildCareProvider' },
-  { value: JobCategory.Cook, label: 'Cook' },
-  { value: JobCategory.Gardner, label: 'Gardner' },
-  { value: JobCategory.Chauffeur, label: 'Chauffeur' },
-  { value: JobCategory.GeneralHouseholdHelper, label: 'GeneralHouseholdHelper' },
-  { value: JobCategory.SecurityGuarding, label: 'SecurityGuarding' },
-  { value: JobCategory.ElderlyCareProvider, label: 'ElderlyCareProvider' },
-  { value: JobCategory.PetCareProvider, label: 'PetCareProvider' },
-];
-
-  form = this.fb.nonNullable.group({
-    phoneNumber: ['', [Validators.required, Validators.pattern('^(\\+251|251|0)(9|7)\\d{8}$')]],
+  readonly form = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    nationalIdNumber: ['', Validators.required, Validators.pattern('^\\d{16}$')],
-    email: [''], // Optional
-    city: ['Addis Ababa', Validators.required],
+    phoneNumber: ['', [Validators.required, Validators.pattern(/^0\d{9}$/)]],
+    email: ['', [Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    nationalIdNumber: ['', Validators.required],
+    city: ['', Validators.required],
     subCity: ['', Validators.required],
     woreda: ['', Validators.required],
-    yearsOfExperience: [1, [Validators.required, Validators.min(0)]],
-    expectedSalary: [3000, [Validators.required, Validators.min(500)]],
-    jobCategory: [JobCategory.Maid, Validators.required],
-    skills: this.fb.array<FormControl<string>>([])
+    yearsOfExperience: [0, [Validators.required, Validators.min(0)]],
+    expectedSalary: [0, [Validators.required, Validators.min(0)]],
+    jobCategory: ['', Validators.required],
+    skills: [''], // comma-separated input, split before submit
   });
 
-  get skillsControls(){
-    return this.form.controls.skills;
-  }
-
-  addSkills(){
-    this.skillsControls.push(this.fb.control('',{ nonNullable: true, validators: Validators.required}));
-  }
-
-  removeSkill(index: number){
-    this.skillsControls.removeAt(index);
-  }
-  submit(){
+  submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-
+    this.errorMessages.set([]);
     this.isSubmitting.set(true);
-    this.errorMessage.set(null);
 
     const raw = this.form.getRawValue();
-  
-  
-  const payload: CreateEmployee = {
-    ...raw,
-    email: raw.email?.trim() ? raw.email.trim() : null,
-    skills: raw.skills?.length ? raw.skills : [],
-    jobCategory: Number(raw.jobCategory) // Ensure numeric enum
-  };
 
-  this.employeeService.registerEmployee(payload).subscribe({
-    next: () => {
-      this.isSubmitting.set(false);
-      this.router.navigate(['/landing']);
-    },
-     error: (err) => {
-    this.isSubmitting.set(false);
-    console.error('Validation errors:', err.error?.errors);
-
-    
-    if (err.error?.errors) {
-      const messages = Object.entries(err.error.errors)
-        .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`)
-        .join(' | ');
-      this.errorMessage.set(`Validation Failed: ${messages}`);
-    } else {
-      this.errorMessage.set('Error (400): Bad request. Check console for details.');
-    }
+    this.authService
+      .registerEmployee({
+        firstName: raw.firstName!,
+        lastName: raw.lastName!,
+        phoneNumber: raw.phoneNumber!,
+        email: raw.email || undefined,
+        password: raw.password!,
+        nationalIdNumber: raw.nationalIdNumber!,
+        city: raw.city!,
+        subCity: raw.subCity!,
+        woreda: raw.woreda!,
+        yearsOfExperience: Number(raw.yearsOfExperience),
+        expectedSalary: Number(raw.expectedSalary),
+        jobCategory: raw.jobCategory as any,
+        skills: raw.skills
+          ? raw.skills.split(',').map((s) => s.trim()).filter(Boolean)
+          : [],
+      })
+      .subscribe({
+        next: () => {
+          this.isSubmitting.set(false);
+          this.router.navigate(['/login']);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isSubmitting.set(false);
+          this.errorMessages.set(this.extractErrors(err));
+        },
+      });
   }
-    });
+
+  private extractErrors(err: HttpErrorResponse): string[] {
+    const body = err.error as ApiErrorResponse | undefined;
+    if (body?.errors?.length) return body.errors;
+    return [body?.errorMessage ?? body?.title ?? 'Registration failed. Please try again.'];
   }
 }

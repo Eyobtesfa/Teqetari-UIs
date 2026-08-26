@@ -1,0 +1,47 @@
+<div class="auth-card">
+  <h1>Log in</h1>
+  <p class="subtitle">Employers use email, employees use phone number.</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="field">
+      <label for="identifier">Email or phone number</label>
+      <input
+        id="identifier"
+        type="text"
+        formControlName="identifier"
+        autocomplete="username"
+        [class.invalid]="form.controls.identifier.invalid && form.controls.identifier.touched"
+      />
+      @if (form.controls.identifier.invalid && form.controls.identifier.touched) {
+        <span class="error">Email or phone number is required.</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        autocomplete="current-password"
+        [class.invalid]="form.controls.password.invalid && form.controls.password.touched"
+      />
+      @if (form.controls.password.invalid && form.controls.password.touched) {
+        <span class="error">Password must be at least 6 characters.</span>
+      }
+    </div>
+
+    @if (errorMessage()) {
+      <div class="banner-error">{{ errorMessage() }}</div>
+    }
+
+    <button type="submit" [disabled]="isSubmitting()">
+      {{ isSubmitting() ? 'Logging in…' : 'Log in' }}
+    </button>
+  </form>
+
+  <p class="switch-link">
+    New employee? <a routerLink="/register/employee">Register here</a><br />
+    New employer? <a routerLink="/register/employer">Register here</a>
+  </p>
+</div>
