@@ -1,0 +1,103 @@
+:host {
+  --ink: #1c2a24;
+  --paper: #fbfaf7;
+  --accent: #2f6f4f;
+  --accent-hover: #245a3f;
+  --border: #d9d6cd;
+  --error: #b3261e;
+  display: block;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+}
+
+.auth-card {
+  max-width: 720px;
+  margin: 3rem auto;
+  padding: 2.25rem;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.auth-card h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.65rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 0 0 1.75rem;
+  color: #5c6b62;
+  font-size: 0.9rem;
+}
+
+.dashboard-actions {
+  margin-bottom: 2rem;
+}
+
+.primary-action {
+  width: auto;
+  padding: 0.65rem 1.25rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.primary-action:hover {
+  background: var(--accent-hover);
+}
+
+.dashboard-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.dashboard-section h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+.placeholder-text {
+  color: #5c6b62;
+  font-size: 0.9rem;
+}
+.job-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.job-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.job-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.job-meta {
+  font-size: 0.8rem;
+  color: #5c6b62;
+}
+
+.job-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.job-status.inactive {
+  color: #999;
+}

@@ -1,0 +1,40 @@
+<div class="auth-card">
+  <h1>Employer dashboard</h1>
+  <p class="subtitle">Manage your job postings and candidates.</p>
+
+  <div class="dashboard-actions">
+    <a routerLink="/job-post">
+      <button type="button" class="primary-action">+ Post a Job</button>
+    </a>
+  </div>
+
+  <!-- Placeholder sections — wire these up as those features are built -->
+  <div class="dashboard-section">
+  <h2>Your postings</h2>
+
+  @if (isLoading()) {
+    <p class="placeholder-text">Loading…</p>
+  } @else if (jobs().length === 0) {
+    <p class="placeholder-text">Nothing here yet.</p>
+  } @else {
+    <ul class="job-list">
+      @for (job of jobs(); track job.id) {
+        <li>
+          <div class="job-info">
+            <strong>{{ job.title }}</strong>
+            <span class="job-meta">{{ job.location }} · {{ job.offeredSalaryMin }}–{{ job.offeredSalaryMax }} ETB</span>
+          </div>
+          <span class="job-status">
+            Expires {{ job.expirationDate | date: 'mediumDate' }}
+          </span>
+        </li>
+      }
+    </ul>
+  }
+</div>
+
+  <div class="dashboard-section">
+    <h2>Registered employees</h2>
+    <p class="placeholder-text">Nothing here yet.</p>
+  </div>
+</div>

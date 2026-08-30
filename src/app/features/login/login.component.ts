@@ -14,10 +14,7 @@ import { ApiErrorResponse } from '../../Models/auth.model';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  // CHANGED: services obtained via inject() instead of constructor params.
-  // Field initializers (like `form` below) run before constructor-assigned
-  // parameter properties are available, which caused "used before its
-  // initialization" — inject() avoids that ordering issue entirely.
+  
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -46,7 +43,8 @@ export class LoginComponent {
       .subscribe({
         next: () => {
           this.isSubmitting.set(false);
-          this.router.navigate(['/landing']);
+          const userType = this.authService.getUserType();
+          this.router.navigate([userType === 'Employer' ? '/employer-dash' : '/landing']);
         },
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);

@@ -29,6 +29,21 @@ export const routes: Routes = [
       ),
   },
   {
-   path: '**', redirectTo: 'login'
+  path: 'employer-dash',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/employer-dash/employer-dash.component').then(
+      (m) => m.EmployerDashboardComponent
+    ),
+},
+{
+  path: 'job-post',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/job-post/job-post.component').then((m) => m.JobPostComponent),
+},
+  {
+   path: '**', redirectTo: 'landing'
   },
+  
 ];

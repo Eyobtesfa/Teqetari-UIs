@@ -1,8 +1,8 @@
 export enum JobCategory{
     Maid = 0,
-    ChildCareProvide = 1,
+    ChildCareProvider = 1,
     Cook = 2,
-    Gardner = 3,
+    Gardener = 3,
     Chauffeur = 4,
     GeneralHouseholdHelper = 5,
     SecurityGuarding = 6,

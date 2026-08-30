@@ -9,16 +9,20 @@ import {
   RefreshTokenDto,
 } from '../Models/auth.model';
 import { API_BASE_URL } from './api-config';
+import { jwtDecode } from 'jwt-decode';
 
 const REFRESH_TOKEN_KEY = 'teqetari_refresh_token';
+interface DecodedToken {
+    UserType? :string;
+    [key: string] : unknown
+  }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // Access token lives in memory only — never localStorage/sessionStorage.
-  // It's readable by any script on the page, so persisting it there is an XSS risk.
+  
   private _accessToken: string | null = null;
 
-  // Signal so components (e.g. a nav bar) can reactively show logged-in state.
+  
   readonly isAuthenticated = signal<boolean>(false);
 
   constructor(private http: HttpClient) {}
@@ -32,10 +36,7 @@ export class AuthService {
   }
 
   registerEmployer(dto: CreateEmployerDto): Observable<void> {
-    // $type must be the FIRST key in the JSON body for the backend's polymorphic
-    // deserialization to pick the right subtype. CHANGED: destructure $type out
-    // of dto first so the spread below can't redeclare/overwrite it — TS flagged
-    // the old `{ $type: dto.$type, ...dto }` as a redundant duplicate key.
+   
     const { $type, ...rest } = dto;
     const ordered = { $type, ...rest };
     return this.http.post<void>(`${API_BASE_URL}/auth/register/employer`, ordered);
@@ -46,6 +47,17 @@ export class AuthService {
       tap((res) => this.setSession(res))
     );
   }
+
+
+  getUserType(): string | null {
+  if (!this._accessToken) return null;
+  try {
+    const decoded = jwtDecode<DecodedToken>(this._accessToken);
+    return decoded.UserType ?? null;
+  } catch {
+    return null;
+  }
+}
 
   refresh(): Observable<AuthResponse> {
     const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
@@ -70,7 +82,7 @@ export class AuthService {
     this.isAuthenticated.set(false);
   }
 
-  /** Call once on app bootstrap to silently restore a session after a page refresh. */
+  
   tryRestoreSession(): Observable<AuthResponse> {
     return this.refresh();
   }
