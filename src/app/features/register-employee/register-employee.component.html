@@ -1,107 +1,150 @@
-<div class="auth-card">
-  <h1>Register as an employee</h1>
-  <p class="subtitle">Create your profile so employers can find you.</p>
+<div class="auth-page">
+  <div class="blob blob-a" aria-hidden="true"></div>
+  <div class="blob blob-b" aria-hidden="true"></div>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-    <div class="field-row">
-      <div class="field">
-        <label for="firstName">First name</label>
-        <input id="firstName" type="text" formControlName="firstName"
-          [class.invalid]="form.controls.firstName.invalid && form.controls.firstName.touched" />
+  <div class="auth-shell">
+
+    <aside class="info-panel" aria-hidden="true">
+      <div class="brand-mark"><span class="dot"></span>Teqetari</div>
+
+      <h2 class="voice">Your next job starts here</h2>
+      <p class="panel-copy">One profile, shared with every household and business hiring on Teqetari. It takes a few minutes to set up.</p>
+
+      <ul class="benefits">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          <span>Verified employers only</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.4-9.5-8.8C.8 8.6 2.6 5 6 5c2 0 3.4 1.1 4 2.4C10.6 6.1 12 5 14 5c3.4 0 5.2 3.6 3.5 7.2C15 16.6 12 21 12 21z"/></svg>
+          <span>Matched by city and category</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M4 8l8-5 8 5M4 8v9a1 1 0 001 1h3M20 8v9a1 1 0 01-1 1h-3"/></svg>
+          <span>Free to create a profile</span>
+        </li>
+      </ul>
+
+      <div class="panel-categories">
+        <span class="chip-sm">Nanny</span>
+        <span class="chip-sm">Housekeeper</span>
+        <span class="chip-sm">Cook</span>
+        <span class="chip-sm">Driver</span>
+        <span class="chip-sm">Caregiver</span>
       </div>
-      <div class="field">
-        <label for="lastName">Last name</label>
-        <input id="lastName" type="text" formControlName="lastName"
-          [class.invalid]="form.controls.lastName.invalid && form.controls.lastName.touched" />
-      </div>
-    </div>
+    </aside>
 
-    <div class="field">
-      <label for="phoneNumber">Phone number</label>
-      <input id="phoneNumber" type="tel" formControlName="phoneNumber" placeholder="0911234567"
-        [class.invalid]="form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched" />
-      @if (form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched) {
-        <span class="error">Enter a valid phone number (e.g. 0911234567).</span>
-      }
-    </div>
+    <!-- ============================================= -->
+    <!-- ORIGINAL FUNCTIONAL BLOCK — structure untouched -->
+    <!-- ============================================= -->
+    <div class="auth-card">
+      <h1>Register as an employee</h1>
+      <p class="subtitle">Create your profile so employers can find you.</p>
 
-    <div class="field">
-      <label for="email">Email (optional)</label>
-      <input id="email" type="email" formControlName="email" />
-    </div>
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="firstName">First name</label>
+            <input id="firstName" type="text" formControlName="firstName"
+              [class.invalid]="form.controls.firstName.invalid && form.controls.firstName.touched" />
+          </div>
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <input id="lastName" type="text" formControlName="lastName"
+              [class.invalid]="form.controls.lastName.invalid && form.controls.lastName.touched" />
+          </div>
+        </div>
 
-    <div class="field">
-      <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password" autocomplete="new-password"
-        [class.invalid]="form.controls.password.invalid && form.controls.password.touched" />
-      @if (form.controls.password.invalid && form.controls.password.touched) {
-        <span class="error">Password must be at least 6 characters.</span>
-      }
-    </div>
+        <div class="field">
+          <label for="phoneNumber">Phone number</label>
+          <input id="phoneNumber" type="tel" formControlName="phoneNumber" placeholder="0911234567"
+            [class.invalid]="form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched" />
+          @if (form.controls.phoneNumber.invalid && form.controls.phoneNumber.touched) {
+            <span class="error">Enter a valid phone number (e.g. 0911234567).</span>
+          }
+        </div>
 
-    <div class="field">
-      <label for="nationalIdNumber">National ID number</label>
-      <input id="nationalIdNumber" type="text" formControlName="nationalIdNumber"
-        [class.invalid]="form.controls.nationalIdNumber.invalid && form.controls.nationalIdNumber.touched" />
-    </div>
+        <div class="field">
+          <label for="email">Email (optional)</label>
+          <input id="email" type="email" formControlName="email" />
+        </div>
 
-    <div class="field-row">
-      <div class="field">
-        <label for="city">City</label>
-        <input id="city" type="text" formControlName="city" />
-      </div>
-      <div class="field">
-        <label for="subCity">Sub-city</label>
-        <input id="subCity" type="text" formControlName="subCity" />
-      </div>
-    </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" formControlName="password" autocomplete="new-password"
+            [class.invalid]="form.controls.password.invalid && form.controls.password.touched" />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <span class="error">Password must be at least 6 characters.</span>
+          }
+        </div>
 
-    <div class="field">
-      <label for="woreda">Woreda</label>
-      <input id="woreda" type="text" formControlName="woreda" />
-    </div>
+        <div class="field">
+          <label for="nationalIdNumber">National ID number</label>
+          <input id="nationalIdNumber" type="text" formControlName="nationalIdNumber"
+            [class.invalid]="form.controls.nationalIdNumber.invalid && form.controls.nationalIdNumber.touched" />
+        </div>
 
-    <div class="field-row">
-      <div class="field">
-        <label for="yearsOfExperience">Years of experience</label>
-        <input id="yearsOfExperience" type="number" min="0" formControlName="yearsOfExperience" />
-      </div>
-      <div class="field">
-        <label for="expectedSalary">Expected salary (ETB)</label>
-        <input id="expectedSalary" type="number" min="0" formControlName="expectedSalary" />
-      </div>
-    </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="city">City</label>
+            <input id="city" type="text" formControlName="city" />
+          </div>
+          <div class="field">
+            <label for="subCity">Sub-city</label>
+            <input id="subCity" type="text" formControlName="subCity" />
+          </div>
+        </div>
 
-    <div class="field">
-      <label for="jobCategory">Job category</label>
-      <select id="jobCategory" formControlName="jobCategory"
-        [class.invalid]="form.controls.jobCategory.invalid && form.controls.jobCategory.touched">
-        <option value="" disabled selected>Select a category</option>
-        @for (category of jobCategories; track category) {
-          <option [value]="category">{{ category }}</option>
+        <div class="field">
+          <label for="woreda">Woreda</label>
+          <input id="woreda" type="text" formControlName="woreda" />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="yearsOfExperience">Years of experience</label>
+            <input id="yearsOfExperience" type="number" min="0" formControlName="yearsOfExperience" />
+          </div>
+          <div class="field">
+            <label for="expectedSalary">Expected salary (ETB)</label>
+            <input id="expectedSalary" type="number" min="0" formControlName="expectedSalary" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="jobCategory">Job category</label>
+          <select id="jobCategory" formControlName="jobCategory"
+            [class.invalid]="form.controls.jobCategory.invalid && form.controls.jobCategory.touched">
+            <option value="" disabled selected>Select a category</option>
+            @for (category of jobCategories; track category) {
+              <option [value]="category">{{ category }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="skills">Skills (comma-separated, optional)</label>
+          <input id="skills" type="text" formControlName="skills" placeholder="Cooking, Childcare, Driving" />
+        </div>
+
+        @if (errorMessages().length) {
+          <div class="banner-error">
+            @for (msg of errorMessages(); track msg) {
+              <div>{{ msg }}</div>
+            }
+          </div>
         }
-      </select>
+
+        <button type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Creating account…' : 'Create account' }}
+        </button>
+      </form>
+
+      <p class="switch-link">
+        Already have an account? <a routerLink="/login">Log in</a>
+      </p>
     </div>
+    <!-- ============================================= -->
 
-    <div class="field">
-      <label for="skills">Skills (comma-separated, optional)</label>
-      <input id="skills" type="text" formControlName="skills" placeholder="Cooking, Childcare, Driving" />
-    </div>
-
-    @if (errorMessages().length) {
-      <div class="banner-error">
-        @for (msg of errorMessages(); track msg) {
-          <div>{{ msg }}</div>
-        }
-      </div>
-    }
-
-    <button type="submit" [disabled]="isSubmitting()">
-      {{ isSubmitting() ? 'Creating account…' : 'Create account' }}
-    </button>
-  </form>
-
-  <p class="switch-link">
-    Already have an account? <a routerLink="/login">Log in</a>
-  </p>
+  </div>
 </div>

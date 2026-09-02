@@ -1,1 +1,358 @@
-@import '../auth-shared.css';
+:host{
+  --bg:#FAF6EC;
+  --ink:#16241F;
+  --ink-soft:#4A564F;
+  --ink-faint:#8B958F;
+  --gold:#E8A33D;
+  --gold-deep:#8C5A17;
+  --gold-tint:#FCF1DF;
+  --teal:#0B5D52;
+  --coral:#DE5A34;
+  --coral-tint:#FBEAE3;
+  --white:#FFFFFF;
+  --line: rgba(22,36,31,0.12);
+
+  display:block;
+  font-family:'Manrope',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  color:var(--ink);
+}
+
+*{box-sizing:border-box;}
+a{text-decoration:none;color:inherit;}
+.voice{font-family:'Fraunces',serif;}
+
+/* ---------- page shell ---------- */
+.auth-page{
+  position:relative;
+  min-height:100vh;
+  background:linear-gradient(180deg, var(--gold-tint) 0%, var(--bg) 46%);
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(28px, 5vw, 64px) clamp(20px, 4vw, 40px);
+}
+
+.blob{
+  position:absolute;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, rgba(232,163,61,0.22), rgba(232,163,61,0) 70%);
+  pointer-events:none;
+  z-index:0;
+  animation:drift 16s ease-in-out infinite;
+}
+.blob-a{width:420px;height:420px;top:-140px;left:-120px;}
+.blob-b{width:320px;height:320px;bottom:-100px;right:-80px;animation-duration:19s;animation-delay:1s;}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(16px,-18px) scale(1.05);}
+}
+@media (prefers-reduced-motion:reduce){
+  .blob{animation:none;}
+}
+
+/* ---------- shell: info panel + form, side by side ---------- */
+.auth-shell{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:1040px;
+  display:grid;
+  grid-template-columns:0.85fr 1.15fr;
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:0 30px 70px rgba(22,36,31,0.14), 0 2px 8px rgba(22,36,31,0.05);
+  animation:shellIn .6s cubic-bezier(.22,.9,.32,1) both;
+}
+@keyframes shellIn{
+  from{opacity:0;transform:translateY(16px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@media (prefers-reduced-motion:reduce){
+  .auth-shell{animation:none;}
+}
+
+/* ---------- info panel ---------- */
+.info-panel{
+  position:relative;
+  background:linear-gradient(160deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color:var(--white);
+  padding:clamp(36px, 3.4vw, 52px) clamp(32px, 3vw, 44px);
+  display:flex;
+  flex-direction:column;
+}
+.brand-mark{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:18px;
+  margin-bottom:clamp(36px, 6vw, 64px);
+}
+.brand-mark .dot{
+  width:9px;height:9px;border-radius:50%;
+  background:linear-gradient(135deg, var(--white) 50%, var(--teal) 50%);
+}
+
+.info-panel h2{
+  font-weight:500;
+  font-size:clamp(24px, 2vw, 29px);
+  line-height:1.15;
+  letter-spacing:-0.01em;
+  margin:0 0 14px;
+}
+.panel-copy{
+  font-size:14.5px;
+  line-height:1.65;
+  color:rgba(255,255,255,0.85);
+  margin:0 0 32px;
+  max-width:320px;
+}
+
+.benefits{
+  list-style:none;
+  margin:0 0 auto;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.benefits li{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:14px;
+  color:rgba(255,255,255,0.94);
+}
+.benefits svg{
+  width:19px;height:19px;
+  flex:none;
+  color:var(--white);
+}
+
+.panel-categories{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:40px;
+  padding-top:24px;
+  border-top:1px solid rgba(255,255,255,0.22);
+}
+.chip-sm{
+  font-size:12.5px;
+  font-weight:600;
+  padding:6px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.16);
+  color:var(--white);
+}
+
+/* ---------- the card (functional block) ---------- */
+.auth-card{
+  background:var(--white);
+  padding:clamp(32px, 3.4vw, 48px) clamp(28px, 3.4vw, 48px) clamp(36px, 3vw, 44px);
+}
+
+.auth-card h1{
+  font-family:'Fraunces',serif;
+  font-weight:500;
+  font-size:clamp(24px, 2.2vw, 29px);
+  letter-spacing:-0.01em;
+  margin:0 0 8px;
+  color:var(--ink);
+}
+.auth-card .subtitle{
+  font-size:15px;
+  line-height:1.55;
+  color:var(--ink-soft);
+  margin:0 0 24px;
+}
+
+/* ---------- employer type tabs ---------- */
+.employer-type-tabs{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:6px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:5px;
+  margin-bottom:26px;
+}
+.employer-type-tabs button{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  height:38px;
+  border-radius:10px;
+  background:transparent;
+  color:var(--ink-soft);
+  font-family:'Manrope',sans-serif;
+  font-weight:600;
+  font-size:13.5px;
+  transition:background .16s ease, color .16s ease, box-shadow .16s ease;
+}
+.employer-type-tabs button:hover{color:var(--ink);}
+.employer-type-tabs button.active{
+  background:var(--gold-deep);
+  color:var(--white);
+  box-shadow:0 6px 14px rgba(140,90,23,0.28);
+}
+
+/* ---------- form layout ---------- */
+form{display:flex;flex-direction:column;}
+
+.field-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  margin-bottom:16px;
+}
+
+label{
+  font-size:13.5px;
+  font-weight:600;
+  color:var(--ink-soft);
+  margin-bottom:7px;
+}
+
+input, select, textarea{
+  appearance:none;
+  -webkit-appearance:none;
+  width:100%;
+  padding:0 14px;
+  border-radius:12px;
+  border:1.5px solid var(--line);
+  background:var(--white);
+  font-family:'Manrope',sans-serif;
+  font-size:15px;
+  color:var(--ink);
+  transition:border-color .16s ease, box-shadow .16s ease;
+}
+input, select{height:44px;}
+textarea{
+  padding:12px 14px;
+  resize:vertical;
+  min-height:64px;
+  line-height:1.5;
+}
+input::placeholder, textarea::placeholder{color:var(--ink-faint);}
+input:hover, select:hover, textarea:hover{border-color:rgba(22,36,31,0.24);}
+input:focus, select:focus, textarea:focus{
+  outline:none;
+  border-color:var(--gold-deep);
+  box-shadow:0 0 0 4px rgba(140,90,23,0.14);
+}
+input.invalid, select.invalid{
+  border-color:var(--coral);
+}
+input.invalid:focus, select.invalid:focus{
+  box-shadow:0 0 0 4px rgba(222,90,52,0.14);
+}
+
+/* checkbox */
+.checkbox-field{
+  flex-direction:row;
+  align-items:center;
+  gap:9px;
+  margin-top:2px;
+}
+.checkbox-field input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  accent-color:var(--gold-deep);
+  cursor:pointer;
+}
+.checkbox-field label{
+  margin:0;
+  font-weight:500;
+  color:var(--ink);
+  cursor:pointer;
+}
+
+/* type-specific fields fade/rise in when the tab changes */
+.type-fields{
+  animation:typeFieldsIn .3s ease both;
+}
+@keyframes typeFieldsIn{
+  from{opacity:0;transform:translateY(6px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@media (prefers-reduced-motion:reduce){
+  .type-fields{animation:none;}
+}
+
+.error{
+  font-size:12.5px;
+  color:var(--coral);
+  margin-top:6px;
+}
+
+.banner-error{
+  background:var(--coral-tint);
+  border:1px solid rgba(222,90,52,0.25);
+  color:#9C3A1F;
+  border-radius:12px;
+  padding:12px 16px;
+  font-size:13.5px;
+  line-height:1.6;
+  margin:6px 0 20px;
+}
+
+/* ---------- submit button ---------- */
+button[type="submit"]{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  height:48px;
+  border-radius:999px;
+  background:var(--gold-deep);
+  color:var(--white);
+  font-family:'Manrope',sans-serif;
+  font-weight:600;
+  font-size:15.5px;
+  margin-top:8px;
+  transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+button[type="submit"]:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:0 12px 26px rgba(140,90,23,0.32);
+}
+button[type="submit"]:active:not(:disabled){transform:translateY(0);}
+button[type="submit"]:disabled{
+  background:var(--ink-faint);
+  cursor:not-allowed;
+}
+
+.switch-link{
+  text-align:center;
+  font-size:14px;
+  color:var(--ink-soft);
+  margin:22px 0 0;
+}
+.switch-link a{
+  color:var(--gold-deep);
+  font-weight:600;
+}
+.switch-link a:hover{text-decoration:underline;}
+
+/* ---------- responsive ---------- */
+@media (max-width:860px){
+  .auth-shell{
+    grid-template-columns:1fr;
+    max-width:560px;
+  }
+  .info-panel{display:none;}
+}
+@media (max-width:520px){
+  .field-row{grid-template-columns:1fr;gap:0;}
+  .auth-shell{border-radius:20px;}
+  .employer-type-tabs{grid-template-columns:1fr;}
+}

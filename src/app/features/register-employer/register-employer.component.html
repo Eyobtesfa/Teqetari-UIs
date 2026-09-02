@@ -1,173 +1,214 @@
-<div class="auth-card">
-  <h1>Register as an employer</h1>
-  <p class="subtitle">Choose the type of employer account you need.</p>
+<div class="auth-page">
+  <div class="blob blob-a" aria-hidden="true"></div>
+  <div class="blob blob-b" aria-hidden="true"></div>
 
-  <div class="employer-type-tabs">
-    <button type="button" [class.active]="selectedType() === 'Household'" (click)="selectType('Household')">
-      Household
-    </button>
-    <button type="button" [class.active]="selectedType() === 'PrivateCompany'" (click)="selectType('PrivateCompany')">
-      Company
-    </button>
-    <button type="button" [class.active]="selectedType() === 'GovernmentOrganization'" (click)="selectType('GovernmentOrganization')">
-      Government
-    </button>
-  </div>
+  <div class="auth-shell">
 
-  <form [formGroup]="commonForm" (ngSubmit)="submit()" novalidate>
-    <!-- Common fields, shared by every employer type -->
-    <div [formGroup]="commonForm">
-      <div class="field">
-        <label for="email">Email</label>
-        <input id="email" type="email" formControlName="email"
-          [class.invalid]="commonForm.controls.email.invalid && commonForm.controls.email.touched" />
+    <aside class="info-panel" aria-hidden="true">
+      <div class="brand-mark"><span class="dot"></span>Teqetari</div>
+
+      <h2 class="voice">Hire with confidence</h2>
+      <p class="panel-copy">One account for your household, company, or office. Post openings and review candidates who match what you need.</p>
+
+      <ul class="benefits">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          <span>Candidates are ID-verified</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg>
+          <span>Post as many openings as you need</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M4 8l8-5 8 5M4 8v9a1 1 0 001 1h3M20 8v9a1 1 0 01-1 1h-3"/></svg>
+          <span>Free to create a profile</span>
+        </li>
+      </ul>
+
+      <div class="panel-categories">
+        <span class="chip-sm">Household</span>
+        <span class="chip-sm">Company</span>
+        <span class="chip-sm">Government</span>
+      </div>
+    </aside>
+
+    <!-- ============================================= -->
+    <!-- ORIGINAL FUNCTIONAL BLOCK — structure untouched -->
+    <!-- ============================================= -->
+    <div class="auth-card">
+      <h1>Register as an employer</h1>
+      <p class="subtitle">Choose the type of employer account you need.</p>
+
+      <div class="employer-type-tabs">
+        <button type="button" [class.active]="selectedType() === 'Household'" (click)="selectType('Household')">
+          Household
+        </button>
+        <button type="button" [class.active]="selectedType() === 'PrivateCompany'" (click)="selectType('PrivateCompany')">
+          Company
+        </button>
+        <button type="button" [class.active]="selectedType() === 'GovernmentOrganization'" (click)="selectType('GovernmentOrganization')">
+          Government
+        </button>
       </div>
 
-      <div class="field">
-        <label for="phoneNumber">Phone number</label>
-        <input id="phoneNumber" type="tel" formControlName="phoneNumber" placeholder="0911234567"
-          [class.invalid]="commonForm.controls.phoneNumber.invalid && commonForm.controls.phoneNumber.touched" />
-      </div>
+      <form [formGroup]="commonForm" (ngSubmit)="submit()" novalidate>
+        <!-- Common fields, shared by every employer type -->
+        <div [formGroup]="commonForm">
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email"
+              [class.invalid]="commonForm.controls.email.invalid && commonForm.controls.email.touched" />
+          </div>
 
-      <div class="field">
-        <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" autocomplete="new-password"
-          [class.invalid]="commonForm.controls.password.invalid && commonForm.controls.password.touched" />
-        @if (commonForm.controls.password.invalid && commonForm.controls.password.touched) {
-          <span class="error">Password must be at least 6 characters.</span>
+          <div class="field">
+            <label for="phoneNumber">Phone number</label>
+            <input id="phoneNumber" type="tel" formControlName="phoneNumber" placeholder="0911234567"
+              [class.invalid]="commonForm.controls.phoneNumber.invalid && commonForm.controls.phoneNumber.touched" />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" formControlName="password" autocomplete="new-password"
+              [class.invalid]="commonForm.controls.password.invalid && commonForm.controls.password.touched" />
+            @if (commonForm.controls.password.invalid && commonForm.controls.password.touched) {
+              <span class="error">Password must be at least 6 characters.</span>
+            }
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="city">City</label>
+              <input id="city" type="text" formControlName="city" />
+            </div>
+            <div class="field">
+              <label for="subCity">Sub-city</label>
+              <input id="subCity" type="text" formControlName="subCity" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="woreda">Woreda</label>
+            <input id="woreda" type="text" formControlName="woreda" />
+          </div>
+
+          <div class="field">
+            <label for="specialInstruction">Special instructions (optional)</label>
+            <textarea id="specialInstruction" rows="2" formControlName="specialInstruction"></textarea>
+          </div>
+        </div>
+
+        <!-- Household-only fields -->
+        @if (selectedType() === 'Household') {
+          <div [formGroup]="householdForm" class="type-fields">
+            <div class="field-row">
+              <div class="field">
+                <label for="hFirstName">First name</label>
+                <input id="hFirstName" type="text" formControlName="firstName" />
+              </div>
+              <div class="field">
+                <label for="hLastName">Last name</label>
+                <input id="hLastName" type="text" formControlName="lastName" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="hNationalId">National ID number</label>
+              <input id="hNationalId" type="text" formControlName="nationalIdNumber" />
+            </div>
+            <div class="field">
+              <label for="hFamilyMembers">Number of family members</label>
+              <input id="hFamilyMembers" type="number" min="1" formControlName="numberOfFamilyMembers" />
+            </div>
+            <div class="field checkbox-field">
+              <input id="hHasPets" type="checkbox" formControlName="hasPets" />
+              <label for="hHasPets">We have pets</label>
+            </div>
+          </div>
         }
-      </div>
 
-      <div class="field-row">
-        <div class="field">
-          <label for="city">City</label>
-          <input id="city" type="text" formControlName="city" />
-        </div>
-        <div class="field">
-          <label for="subCity">Sub-city</label>
-          <input id="subCity" type="text" formControlName="subCity" />
-        </div>
-      </div>
+        <!-- Private company-only fields -->
+        @if (selectedType() === 'PrivateCompany') {
+          <div [formGroup]="companyForm" class="type-fields">
+            <div class="field">
+              <label for="cCompanyName">Company name</label>
+              <input id="cCompanyName" type="text" formControlName="companyName" />
+            </div>
+            <div class="field">
+              <label for="cIndustry">Industry</label>
+              <input id="cIndustry" type="text" formControlName="industry" />
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="cTradeLicense">Trade license number</label>
+                <input id="cTradeLicense" type="text" formControlName="tradeLicenseNumber" />
+              </div>
+              <div class="field">
+                <label for="cTaxReg">Tax registration number</label>
+                <input id="cTaxReg" type="text" formControlName="taxRegistrationNumber" />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="cContactName">Contact person name</label>
+                <input id="cContactName" type="text" formControlName="contactPersonName" />
+              </div>
+              <div class="field">
+                <label for="cContactRole">Contact person role</label>
+                <input id="cContactRole" type="text" formControlName="contactPersonRole" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="cSize">Company size (employees)</label>
+              <input id="cSize" type="number" min="1" formControlName="companySize" />
+            </div>
+          </div>
+        }
 
-      <div class="field">
-        <label for="woreda">Woreda</label>
-        <input id="woreda" type="text" formControlName="woreda" />
-      </div>
+        <!-- Government organization-only fields -->
+        @if (selectedType() === 'GovernmentOrganization') {
+          <div [formGroup]="governmentForm" class="type-fields">
+            <div class="field">
+              <label for="gOrgName">Organization name</label>
+              <input id="gOrgName" type="text" formControlName="organizationName" />
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="gSector">Sector</label>
+                <input id="gSector" type="text" formControlName="sector" />
+              </div>
+              <div class="field">
+                <label for="gDepartment">Department</label>
+                <input id="gDepartment" type="text" formControlName="department" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="gOfficerName">Authorized officer name</label>
+              <input id="gOfficerName" type="text" formControlName="authorizedOfficerName" />
+            </div>
+            <div class="field">
+              <label for="gLetterRef">Official letter reference number</label>
+              <input id="gLetterRef" type="text" formControlName="officialLetterRefNumber" />
+            </div>
+          </div>
+        }
 
-      <div class="field">
-        <label for="specialInstruction">Special instructions (optional)</label>
-        <textarea id="specialInstruction" rows="2" formControlName="specialInstruction"></textarea>
-      </div>
+        @if (errorMessages().length) {
+          <div class="banner-error">
+            @for (msg of errorMessages(); track msg) {
+              <div>{{ msg }}</div>
+            }
+          </div>
+        }
+
+        <button type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Creating account…' : 'Create account' }}
+        </button>
+      </form>
+
+      <p class="switch-link">
+        Already have an account? <a routerLink="/login">Log in</a>
+      </p>
     </div>
+    <!-- ============================================= -->
 
-    <!-- Household-only fields -->
-    @if (selectedType() === 'Household') {
-      <div [formGroup]="householdForm">
-        <div class="field-row">
-          <div class="field">
-            <label for="hFirstName">First name</label>
-            <input id="hFirstName" type="text" formControlName="firstName" />
-          </div>
-          <div class="field">
-            <label for="hLastName">Last name</label>
-            <input id="hLastName" type="text" formControlName="lastName" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="hNationalId">National ID number</label>
-          <input id="hNationalId" type="text" formControlName="nationalIdNumber" />
-        </div>
-        <div class="field">
-          <label for="hFamilyMembers">Number of family members</label>
-          <input id="hFamilyMembers" type="number" min="1" formControlName="numberOfFamilyMembers" />
-        </div>
-        <div class="field checkbox-field">
-          <input id="hHasPets" type="checkbox" formControlName="hasPets" />
-          <label for="hHasPets">We have pets</label>
-        </div>
-      </div>
-    }
-
-    <!-- Private company-only fields -->
-    @if (selectedType() === 'PrivateCompany') {
-      <div [formGroup]="companyForm">
-        <div class="field">
-          <label for="cCompanyName">Company name</label>
-          <input id="cCompanyName" type="text" formControlName="companyName" />
-        </div>
-        <div class="field">
-          <label for="cIndustry">Industry</label>
-          <input id="cIndustry" type="text" formControlName="industry" />
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="cTradeLicense">Trade license number</label>
-            <input id="cTradeLicense" type="text" formControlName="tradeLicenseNumber" />
-          </div>
-          <div class="field">
-            <label for="cTaxReg">Tax registration number</label>
-            <input id="cTaxReg" type="text" formControlName="taxRegistrationNumber" />
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="cContactName">Contact person name</label>
-            <input id="cContactName" type="text" formControlName="contactPersonName" />
-          </div>
-          <div class="field">
-            <label for="cContactRole">Contact person role</label>
-            <input id="cContactRole" type="text" formControlName="contactPersonRole" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="cSize">Company size (employees)</label>
-          <input id="cSize" type="number" min="1" formControlName="companySize" />
-        </div>
-      </div>
-    }
-
-    <!-- Government organization-only fields -->
-    @if (selectedType() === 'GovernmentOrganization') {
-      <div [formGroup]="governmentForm">
-        <div class="field">
-          <label for="gOrgName">Organization name</label>
-          <input id="gOrgName" type="text" formControlName="organizationName" />
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="gSector">Sector</label>
-            <input id="gSector" type="text" formControlName="sector" />
-          </div>
-          <div class="field">
-            <label for="gDepartment">Department</label>
-            <input id="gDepartment" type="text" formControlName="department" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="gOfficerName">Authorized officer name</label>
-          <input id="gOfficerName" type="text" formControlName="authorizedOfficerName" />
-        </div>
-        <div class="field">
-          <label for="gLetterRef">Official letter reference number</label>
-          <input id="gLetterRef" type="text" formControlName="officialLetterRefNumber" />
-        </div>
-      </div>
-    }
-
-    @if (errorMessages().length) {
-      <div class="banner-error">
-        @for (msg of errorMessages(); track msg) {
-          <div>{{ msg }}</div>
-        }
-      </div>
-    }
-
-    <button type="submit" [disabled]="isSubmitting()">
-      {{ isSubmitting() ? 'Creating account…' : 'Create account' }}
-    </button>
-  </form>
-
-  <p class="switch-link">
-    Already have an account? <a routerLink="/login">Log in</a>
-  </p>
+  </div>
 </div>
