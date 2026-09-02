@@ -5,7 +5,6 @@ export const routes: Routes = [
     {path: '', redirectTo: 'landing', pathMatch: 'full'},
     {
     path: 'landing',
-    canActivate: [authGuard], // now the only 'landing' route, so the guard actually applies
     loadComponent: () =>
       import('./features/landing/landing.component').then((m) => m.LandingComponent),
   },
@@ -41,6 +40,14 @@ export const routes: Routes = [
   canActivate: [authGuard],
   loadComponent: () =>
     import('./features/job-post/job-post.component').then((m) => m.JobPostComponent),
+},
+{
+  path: 'browse-employees',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/browse-employees/browse-employees.component').then(
+      (m) => m.BrowseEmployeesComponent
+    ),
 },
   {
    path: '**', redirectTo: 'landing'

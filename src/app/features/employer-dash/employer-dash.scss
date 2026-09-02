@@ -1,103 +1,204 @@
-:host {
-  --ink: #1c2a24;
-  --paper: #fbfaf7;
-  --accent: #2f6f4f;
-  --accent-hover: #245a3f;
-  --border: #d9d6cd;
-  --error: #b3261e;
-  display: block;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: var(--ink);
+:host{
+  --bg:#FAF6EC;
+  --ink:#16241F;
+  --ink-soft:#4A564F;
+  --ink-faint:#8B958F;
+  --gold:#E8A33D;
+  --gold-deep:#8C5A17;
+  --gold-tint:#FCF1DF;
+  --teal:#0B5D52;
+  --teal-tint:#E7F1EE;
+  --white:#FFFFFF;
+  --line: rgba(22,36,31,0.1);
+
+  display:block;
+  font-family:'Manrope',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  color:var(--ink);
 }
 
-.auth-card {
-  max-width: 720px;
-  margin: 3rem auto;
-  padding: 2.25rem;
-  background: var(--paper);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+*{box-sizing:border-box;}
+a{text-decoration:none;color:inherit;}
+
+/* ---------- page shell ---------- */
+.dashboard-page{
+  min-height:100vh;
+  background:var(--bg);
+  padding:clamp(28px, 4vw, 56px) clamp(20px, 4vw, 48px) 64px;
 }
 
-.auth-card h1 {
-  margin: 0 0 0.35rem;
-  font-size: 1.65rem;
-  font-weight: 700;
+/* ---------- card: grid maps the existing children into a header row + two columns ---------- */
+.auth-card{
+  max-width:1160px;
+  margin:0 auto;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:clamp(28px, 3vw, 40px) clamp(24px, 3vw, 40px) clamp(36px, 3vw, 44px);
+  box-shadow:0 20px 48px rgba(22,36,31,0.07);
+
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  column-gap:28px;
+  row-gap:4px;
+  align-items:start;
 }
 
-.subtitle {
-  margin: 0 0 1.75rem;
-  color: #5c6b62;
-  font-size: 0.9rem;
+.auth-card > h1{
+  grid-column:1;
+  grid-row:1;
+  font-family:'Fraunces',serif;
+  font-weight:500;
+  font-size:clamp(24px, 2.2vw, 29px);
+  letter-spacing:-0.01em;
+  margin:0 0 6px;
+  color:var(--ink);
+}
+.auth-card > .subtitle{
+  grid-column:1;
+  grid-row:2;
+  font-size:15px;
+  color:var(--ink-soft);
+  margin:0 0 20px;
+}
+.auth-card > .dashboard-actions{
+  grid-column:2;
+  grid-row:1 / span 2;
+  justify-self:end;
+  align-self:end;
+  margin-bottom:20px;
 }
 
-.dashboard-actions {
-  margin-bottom: 2rem;
+.auth-card > .dashboard-section:nth-of-type(1){
+  grid-column:1;
+  grid-row:3;
+}
+.auth-card > .dashboard-section:nth-of-type(2){
+  grid-column:2;
+  grid-row:3;
 }
 
-.primary-action {
-  width: auto;
-  padding: 0.65rem 1.25rem;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
+/* ---------- section cards ---------- */
+.dashboard-section{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:22px 22px 26px;
+}
+.dashboard-section h2{
+  font-family:'Fraunces',serif;
+  font-weight:500;
+  font-size:17px;
+  margin:0 0 16px;
+  color:var(--ink);
 }
 
-.primary-action:hover {
-  background: var(--accent-hover);
+/* ---------- primary action button ---------- */
+.primary-action{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  height:44px;
+  padding:0 22px;
+  border-radius:999px;
+  background:var(--gold-deep);
+  color:var(--white);
+  font-family:'Manrope',sans-serif;
+  font-weight:600;
+  font-size:14.5px;
+  white-space:nowrap;
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+.primary-action:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(140,90,23,0.3);
+}
+.primary-action:active{transform:translateY(0);}
+
+.dashboard-section .primary-action{
+  background:var(--teal);
+  width:100%;
+}
+.dashboard-section .primary-action:hover{
+  box-shadow:0 10px 22px rgba(11,93,82,0.28);
 }
 
-.dashboard-section {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+/* ---------- job list ---------- */
+.job-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.job-list li{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px 16px;
+  transition:border-color .15s ease, transform .15s ease;
+}
+.job-list li:hover{
+  border-color:rgba(11,93,82,0.35);
+  transform:translateX(2px);
+}
+.job-info{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+.job-info strong{
+  font-size:14.5px;
+  font-weight:600;
+  color:var(--ink);
+}
+.job-meta{
+  font-size:12.5px;
+  color:var(--ink-soft);
+}
+.job-status{
+  flex:none;
+  font-size:12px;
+  font-weight:600;
+  color:var(--teal);
+  background:var(--teal-tint);
+  padding:6px 10px;
+  border-radius:999px;
+  white-space:nowrap;
 }
 
-.dashboard-section h2 {
-  font-size: 1.1rem;
-  margin: 0 0 0.5rem;
+/* ---------- placeholder / empty states ---------- */
+.placeholder-text{
+  font-size:14px;
+  color:var(--ink-faint);
+  text-align:center;
+  padding:28px 10px;
+  margin:0;
+  border:1.5px dashed var(--line);
+  border-radius:12px;
+  background:var(--white);
 }
 
-.placeholder-text {
-  color: #5c6b62;
-  font-size: 0.9rem;
-}
-.job-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.job-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.job-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.job-meta {
-  font-size: 0.8rem;
-  color: #5c6b62;
-}
-
-.job-status {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--accent);
-}
-
-.job-status.inactive {
-  color: #999;
+/* ---------- responsive ---------- */
+@media (max-width:880px){
+  .auth-card{
+    grid-template-columns:1fr;
+  }
+  .auth-card > h1{grid-column:1;grid-row:1;}
+  .auth-card > .subtitle{grid-column:1;grid-row:2;}
+  .auth-card > .dashboard-actions{
+    grid-column:1;
+    grid-row:3;
+    justify-self:start;
+    align-self:auto;
+    margin:6px 0 22px;
+  }
+  .auth-card > .dashboard-section:nth-of-type(1){grid-column:1;grid-row:4;}
+  .auth-card > .dashboard-section:nth-of-type(2){grid-column:1;grid-row:5;margin-top:20px;}
 }

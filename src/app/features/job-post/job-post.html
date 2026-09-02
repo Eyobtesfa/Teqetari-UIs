@@ -1,85 +1,87 @@
-<div class="auth-card">
-  <h1>Post a job</h1>
-  <p class="subtitle">Describe the role you're hiring for.</p>
+<div class="post-job-page">
+  <div class="auth-card">
+    <h1>Post a job</h1>
+    <p class="subtitle">Describe the role you're hiring for.</p>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-    <div class="field">
-      <label for="title">Title</label>
-      <input id="title" type="text" formControlName="title" />
-    </div>
-
-    <div class="field">
-      <label for="description">Description</label>
-      <textarea id="description" rows="3" formControlName="description"></textarea>
-    </div>
-
-    <div class="field-row">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <div class="field">
-        <label for="category">Category</label>
-        <select id="category" formControlName="category">
-          <option [ngValue]="null" disabled selected>Select a category</option>
-          @for (opt of categoryOptions; track opt.value) {
-            <option [ngValue]="opt.value">{{ opt.label }}</option>
+        <label for="title">Title</label>
+        <input id="title" type="text" formControlName="title" />
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" rows="3" formControlName="description"></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category" formControlName="category">
+            <option [ngValue]="null" disabled selected>Select a category</option>
+            @for (opt of categoryOptions; track opt.value) {
+              <option [ngValue]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label for="workMode">Work mode</label>
+          <select id="workMode" formControlName="workMode">
+            <option [ngValue]="null" disabled selected>Select a mode</option>
+            @for (opt of workModeOptions; track opt.value) {
+              <option [ngValue]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="offeredSalaryMin">Min salary (ETB)</label>
+          <input id="offeredSalaryMin" type="number" min="0" formControlName="offeredSalaryMin" />
+        </div>
+        <div class="field">
+          <label for="offeredSalaryMax">Max salary (ETB)</label>
+          <input id="offeredSalaryMax" type="number" min="0" formControlName="offeredSalaryMax" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="location">Location</label>
+        <input id="location" type="text" formControlName="location" placeholder="Addis Ababa, Yeka, 09" />
+      </div>
+
+      <div class="field">
+        <label for="requiredSkills">Required skills (comma-separated)</label>
+        <input id="requiredSkills" type="text" formControlName="requiredSkills" placeholder="Active, Efficient" />
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="minimumExperienceYears">Min. experience (years)</label>
+          <input id="minimumExperienceYears" type="number" min="0" formControlName="minimumExperienceYears" />
+        </div>
+        <div class="field">
+          <label for="expirationDate">Expires on</label>
+          <input id="expirationDate" type="date" formControlName="expirationDate" />
+        </div>
+      </div>
+
+      @if (successMessages()) {
+        <div class="banner-success">{{ successMessages() }}</div>
+      }
+
+      @if (errorMessages().length) {
+        <div class="banner-error">
+          @for (msg of errorMessages(); track msg) {
+            <div>{{ msg }}</div>
           }
-        </select>
-      </div>
-      <div class="field">
-        <label for="workMode">Work mode</label>
-        <select id="workMode" formControlName="workMode">
-          <option [ngValue]="null" disabled selected>Select a mode</option>
-          @for (opt of workModeOptions; track opt.value) {
-            <option [ngValue]="opt.value">{{ opt.label }}</option>
-          }
-        </select>
-      </div>
-    </div>
+        </div>
+      }
 
-    <div class="field-row">
-      <div class="field">
-        <label for="offeredSalaryMin">Min salary (ETB)</label>
-        <input id="offeredSalaryMin" type="number" min="0" formControlName="offeredSalaryMin" />
-      </div>
-      <div class="field">
-        <label for="offeredSalaryMax">Max salary (ETB)</label>
-        <input id="offeredSalaryMax" type="number" min="0" formControlName="offeredSalaryMax" />
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="location">Location</label>
-      <input id="location" type="text" formControlName="location" placeholder="Addis Ababa, Yeka, 09" />
-    </div>
-
-    <div class="field">
-      <label for="requiredSkills">Required skills (comma-separated)</label>
-      <input id="requiredSkills" type="text" formControlName="requiredSkills" placeholder="Active, Efficient" />
-    </div>
-
-    <div class="field-row">
-      <div class="field">
-        <label for="minimumExperienceYears">Min. experience (years)</label>
-        <input id="minimumExperienceYears" type="number" min="0" formControlName="minimumExperienceYears" />
-      </div>
-      <div class="field">
-        <label for="expirationDate">Expires on</label>
-        <input id="expirationDate" type="date" formControlName="expirationDate" />
-      </div>
-    </div>
-
-    @if (successMessages()) {
-      <div class="banner-success">{{ successMessages() }}</div>
-    }
-
-    @if (errorMessages().length) {
-      <div class="banner-error">
-        @for (msg of errorMessages(); track msg) {
-          <div>{{ msg }}</div>
-        }
-      </div>
-    }
-
-    <button type="submit" [disabled]="isSubmitting()">
-      {{ isSubmitting() ? 'Posting…' : 'Post job' }}
-    </button>
-  </form>
+      <button type="submit" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Posting…' : 'Post job' }}
+      </button>
+    </form>
+  </div>
 </div>

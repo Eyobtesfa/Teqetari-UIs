@@ -1,0 +1,52 @@
+<div class="browse-page">
+  <div class="auth-card">
+    <h1>Browse employees</h1>
+
+    <form [formGroup]="filterForm" (ngSubmit)="search()" class="filter-form">
+      <div class="field-row">
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category" formControlName="category">
+            <option [ngValue]="null">All categories</option>
+            <!-- reuse JOB_CATEGORY_OPTIONS if already declared -->
+          </select>
+        </div>
+        <div class="field">
+          <label for="city">City</label>
+          <input id="city" type="text" formControlName="city" placeholder="Addis Ababa" />
+        </div>
+        <div class="field">
+          <label for="minYearsOfExperience">Min. experience</label>
+          <input id="minYearsOfExperience" type="number" min="0" formControlName="minYearsOfExperience" />
+        </div>
+        <div class="field">
+          <label for="maxExpectedSalary">Max expected salary (ETB)</label>
+          <input id="maxExpectedSalary" type="number" min="0" formControlName="maxExpectedSalary" />
+        </div>
+        <div class="field">
+          <label for="minExpectedSalary">Min expected salary (ETB)</label>
+          <input id="minExpectedSalary" type="number" min="0" formControlName="minExpectedSalary" />
+        </div>
+      </div>
+
+      <button type="submit">Search</button>
+    </form>
+
+    @if (isLoading()) {
+      <p class="placeholder-text">Loading…</p>
+    } @else if (employees().length === 0) {
+      <p class="placeholder-text">No employees match your filters.</p>
+    } @else {
+      <ul class="job-list">
+        @for (emp of employees(); track emp.id) {
+          <li>
+            <div class="job-info">
+              <strong>{{ emp.firstName }} {{ emp.lastName }}</strong>
+              <span class="job-meta">{{ emp.city }} · {{ emp.yearsOfExperience }} yrs exp · {{ emp.expectedSalary }} ETB expected</span>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>
