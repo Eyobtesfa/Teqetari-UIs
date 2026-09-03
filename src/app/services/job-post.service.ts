@@ -16,4 +16,7 @@ export class JobPostService{
     getMyJobs(): Observable<JobPostResponse[]> {
   return this.http.get<JobPostResponse[]>(`${API_BASE_URL}/postJob/mine`);
 }
+getAllJobs(): Observable<JobPostResponse[]> {
+    return this.http.get<JobPostResponse[]>(`${API_BASE_URL}/postJob/all`);
+  }
 }

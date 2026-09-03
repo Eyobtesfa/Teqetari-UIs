@@ -44,7 +44,7 @@ export class LoginComponent {
         next: () => {
           this.isSubmitting.set(false);
           const userType = this.authService.getUserType();
-          this.router.navigate([userType === 'Employer' ? '/employer-dash' : '/landing']);
+          this.router.navigate([userType === 'Employer' ? '/employer-dash' : '/employee-dash']);
         },
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);

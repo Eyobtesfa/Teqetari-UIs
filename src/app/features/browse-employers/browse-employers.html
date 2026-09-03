@@ -1,0 +1,23 @@
+<div class="browse-page">
+  <div class="auth-card">
+    <h1>Browse employers</h1>
+
+    @if (isLoading()) {
+      <p class="placeholder-text">Loading…</p>
+    } @else if (employers().length === 0) {
+      <p class="placeholder-text">No employers found.</p>
+    } @else {
+      <ul class="job-list">
+        @for (e of employers(); track e.id) {
+          <li>
+            <div class="job-info">
+              <strong>{{ displayName(e) }}</strong>
+              <span class="job-meta">{{ e.$type }} · {{ e.city }}, {{ e.subCity }}</span>
+              <span class="job-meta">{{ e.jobPostsCount }} job posting(s) · {{ e.placementContractsCount }} placement(s)</span>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>

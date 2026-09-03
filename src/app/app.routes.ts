@@ -59,6 +59,24 @@ export const routes: Routes = [
   canActivate: [authGuard],
   loadComponent: () => import('./features/received-requests/received-requests').then(m => m.ReceivedRequestsComponent),
 },
+{
+  path: 'browse-employers',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/browse-employers/browse-employers').then(m => m.BrowseEmployersComponent),
+},
+{
+  path: 'browse-jobs',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/browse-job/browse-job').then(m => m.BrowseJobsComponent),
+},
+{
+  path: 'employee-dash',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/employee-dash/employee-dash').then(
+      (m) => m.EmployeeDashboardComponent
+    ),
+},
   {
    path: '**', redirectTo: 'landing'
   },
