@@ -26,6 +26,14 @@ export interface HireRequestResponse{
     status: HireRequestStatus
 }
 
+export interface RespondToHireRequest {
+  accept: boolean;
+  chosenStartDate?: string;
+  chosenEndDate?: string;
+  agencyCommissionPercentage?: number;
+  declineReason?: string;
+}
+
 
 export interface ApiErrorResponse {
   errors?: string[];

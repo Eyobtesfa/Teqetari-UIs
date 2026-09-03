@@ -49,6 +49,16 @@ export const routes: Routes = [
       (m) => m.BrowseEmployeesComponent
     ),
 },
+{
+  path: 'sent-requests',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/sent-requests/sent-requests').then(m => m.SentRequestsComponent),
+},
+{
+  path: 'received-requests',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/received-requests/received-requests').then(m => m.ReceivedRequestsComponent),
+},
   {
    path: '**', redirectTo: 'landing'
   },

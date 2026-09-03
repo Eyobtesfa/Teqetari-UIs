@@ -1,0 +1,148 @@
+:host{
+  --bg:#FAF6EC;
+  --ink:#16241F;
+  --ink-soft:#4A564F;
+  --ink-faint:#8B958F;
+  --gold:#E8A33D;
+  --gold-deep:#8C5A17;
+  --gold-tint:#FCF1DF;
+  --teal:#0B5D52;
+  --teal-tint:#E7F1EE;
+  --coral:#DE5A34;
+  --coral-tint:#FBEAE3;
+  --white:#FFFFFF;
+  --line: rgba(22,36,31,0.1);
+
+  display:block;
+  font-family:'Manrope',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  color:var(--ink);
+}
+
+*{box-sizing:border-box;}
+
+/* ---------- page shell ---------- */
+.requests-page{
+  min-height:100vh;
+  background:var(--bg);
+  padding:clamp(28px, 4vw, 56px) clamp(20px, 4vw, 48px) 64px;
+}
+
+.auth-card{
+  max-width:840px;
+  margin:0 auto;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:clamp(28px, 3vw, 40px) clamp(24px, 3vw, 40px) clamp(36px, 3vw, 44px);
+  box-shadow:0 20px 48px rgba(22,36,31,0.07);
+}
+
+.auth-card h1{
+  font-family:'Fraunces',serif;
+  font-weight:500;
+  font-size:clamp(24px, 2.2vw, 29px);
+  letter-spacing:-0.01em;
+  margin:0 0 24px;
+  color:var(--ink);
+}
+
+/* ---------- request list ---------- */
+.job-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.request-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 18px;
+  transition:border-color .15s ease;
+}
+.request-row:hover{border-color:rgba(11,93,82,0.25);}
+
+.job-info{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  min-width:0;
+}
+.job-info strong{
+  font-size:15px;
+  font-weight:600;
+  color:var(--ink);
+}
+.job-meta{
+  font-size:12.5px;
+  color:var(--ink-soft);
+}
+.decline-reason{
+  color:var(--coral);
+}
+
+/* ---------- status badge ----------
+   Colored for the common hire-request states (pending / accepted / declined / expired / cancelled).
+   statusLabel() output not shown to me, so this covers the likely set — add another
+   .status-<word> rule here if your enum uses a label these don't match; unmatched
+   labels still render, just in the neutral fallback below. */
+.status-badge{
+  flex:none;
+  font-size:12px;
+  font-weight:600;
+  padding:7px 13px;
+  border-radius:999px;
+  white-space:nowrap;
+  background:var(--bg);
+  color:var(--ink-soft);
+  border:1px solid var(--line);
+}
+
+.status-pending{
+  background:var(--gold-tint);
+  color:var(--gold-deep);
+  border-color:rgba(140,90,23,0.2);
+}
+.status-accepted{
+  background:var(--teal-tint);
+  color:var(--teal);
+  border-color:rgba(11,93,82,0.2);
+}
+.status-declined, .status-rejected{
+  background:var(--coral-tint);
+  color:#9C3A1F;
+  border-color:rgba(222,90,52,0.2);
+}
+.status-expired, .status-cancelled, .status-canceled{
+  background:var(--bg);
+  color:var(--ink-faint);
+  border-color:var(--line);
+}
+
+/* ---------- placeholder / empty / loading states ---------- */
+.placeholder-text{
+  font-size:14px;
+  color:var(--ink-faint);
+  text-align:center;
+  padding:28px 10px;
+  margin:0;
+  border:1.5px dashed var(--line);
+  border-radius:12px;
+  background:var(--bg);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:520px){
+  .request-row{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+}

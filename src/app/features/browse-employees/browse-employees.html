@@ -1,14 +1,12 @@
 <div class="browse-page">
   <div class="auth-card">
     <h1>Browse employees</h1>
-
     <form [formGroup]="filterForm" (ngSubmit)="search()" class="filter-form">
       <div class="field-row">
         <div class="field">
           <label for="category">Category</label>
           <select id="category" formControlName="category">
             <option [ngValue]="null">All categories</option>
-            <!-- reuse JOB_CATEGORY_OPTIONS if already declared -->
           </select>
         </div>
         <div class="field">
@@ -20,18 +18,16 @@
           <input id="minYearsOfExperience" type="number" min="0" formControlName="minYearsOfExperience" />
         </div>
         <div class="field">
-          <label for="maxExpectedSalary">Max expected salary (ETB)</label>
-          <input id="maxExpectedSalary" type="number" min="0" formControlName="maxExpectedSalary" />
-        </div>
-        <div class="field">
-          <label for="minExpectedSalary">Min expected salary (ETB)</label>
+          <label for="minExpectedSalary">Min expected salary</label>
           <input id="minExpectedSalary" type="number" min="0" formControlName="minExpectedSalary" />
         </div>
+        <div class="field">
+          <label for="maxExpectedSalary">Max expected salary</label>
+          <input id="maxExpectedSalary" type="number" min="0" formControlName="maxExpectedSalary" />
+        </div>
       </div>
-
       <button type="submit">Search</button>
     </form>
-
     @if (isLoading()) {
       <p class="placeholder-text">Loading…</p>
     } @else if (employees().length === 0) {
@@ -39,11 +35,54 @@
     } @else {
       <ul class="job-list">
         @for (emp of employees(); track emp.id) {
-          <li>
-            <div class="job-info">
-              <strong>{{ emp.firstName }} {{ emp.lastName }}</strong>
-              <span class="job-meta">{{ emp.city }} · {{ emp.yearsOfExperience }} yrs exp · {{ emp.expectedSalary }} ETB expected</span>
+          <li class="employee-row">
+            <div class="employee-row-main">
+              <div class="job-info">
+                <strong>{{ emp.firstName }} {{ emp.lastName }}</strong>
+                <span class="job-meta">
+                  {{ emp.city }} · {{ emp.yearsOfExperience }} yrs exp · {{ emp.expectedSalary }} ETB expected
+                </span>
+              </div>
+              @if (sentSuccessfullyFor() === emp.id) {
+                <span class="sent-badge">Request sent ✓</span>
+              } @else {
+                <button type="button" class="secondary-action" (click)="openHireRequestForm(emp.id)">
+                  Send Hire Request
+                </button>
+              }
             </div>
+            @if (openFormForEmployeeId() === emp.id) {
+              <form [formGroup]="hireRequestForm" (ngSubmit)="sendHireRequest(emp.id)" class="hire-form">
+                <div class="field">
+                  <label for="offeredSalary-{{ emp.id }}">Offered salary (ETB)</label>
+                  <input id="offeredSalary-{{ emp.id }}" type="number" min="0" formControlName="offeredSalary" />
+                </div>
+                
+                <div class="field">
+                  <label for="message-{{ emp.id }}">Message (optional)</label>
+                  <textarea id="message-{{ emp.id }}" rows="2" formControlName="message"></textarea>
+                </div>
+                <div class="field-row">
+                  <div class="field">
+                    <label for="startFrom-{{ emp.id }}">Start date from</label>
+                    <input id="startFrom-{{ emp.id }}" type="date" formControlName="startDateFrom" />
+                  </div>
+                  <div class="field">
+                    <label for="startTo-{{ emp.id }}">Start date to</label>
+                    <input id="startTo-{{ emp.id }}" type="date" formControlName="startDateTo" />
+                  </div>
+                </div>
+                @if (sendError()) {
+                  <div class="banner-error">{{ sendError() }}</div>
+                }
+                <div class="hire-form-actions">
+                  <button type="submit" [disabled]="isSending()">
+                    {{ isSending() ? 'Sending…' : 'Send Hire Request' }}
+                  </button>
+                  <button type="button" class="cancel-action" (click)="closeHireRequestForm()">Cancel</button>
+                </div>
+              </form>
+            }
           </li>
         }
       </ul>

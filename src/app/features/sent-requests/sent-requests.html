@@ -1,0 +1,29 @@
+<div class="requests-page">
+  <div class="auth-card">
+    <h1>Sent hire requests</h1>
+
+    @if (isLoading()) {
+      <p class="placeholder-text">Loading…</p>
+    } @else if (requests().length === 0) {
+      <p class="placeholder-text">You haven't sent any hire requests yet.</p>
+    } @else {
+      <ul class="job-list">
+        @for (r of requests(); track r.id) {
+          <li class="request-row">
+            <div class="job-info">
+              <strong>Offer: {{ r.offeredSalary }} ETB</strong>
+
+              <span class="job-meta">Proposed: {{ r.startDateFrom | date }} – {{ r.startDateTo | date }}</span>
+              @if (r.declineReason) {
+                <span class="job-meta decline-reason">Decline reason: {{ r.declineReason }}</span>
+              }
+            </div>
+            <span class="status-badge" [class]="'status-' + statusLabel(r.status).toLowerCase()">
+              {{ statusLabel(r.status) }}
+            </span>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="requests-page">
+  <div class="auth-card">
+    <h1>Received hire requests</h1>
+
+    @if (isLoading()) {
+      <p class="placeholder-text">Loading…</p>
+    } @else if (requests().length === 0) {
+      <p class="placeholder-text">No hire requests yet.</p>
+    } @else {
+      <ul class="job-list">
+        @for (r of requests(); track r.id) {
+          <li class="request-row">
+            <div class="job-info">
+              <strong>Offer: {{ r.offeredSalary }} ETB</strong>
+
+              @if (r.message) { <span class="job-meta">"{{ r.message }}"</span> }
+              <span class="job-meta">Window: {{ r.startDateFrom | date }} – {{ r.startDateTo | date }}</span>
+            </div>
+
+            @if (r.status === HireRequestStatus.Pending) {
+              <div class="action-buttons">
+                <button type="button" class="secondary-action" (click)="openAccept(r.id)">Accept</button>
+                <button type="button" class="cancel-action" (click)="openDecline(r.id)">Decline</button>
+              </div>
+            } @else {
+              <span class="status-badge">{{ r.status === HireRequestStatus.Accepted ? 'Accepted' : 'Declined' }}</span>
+            }
+
+            @if (openActionFor()?.id === r.id && openActionFor()?.accept) {
+              <form [formGroup]="acceptForm" (ngSubmit)="confirmAccept(r.id)" class="hire-form">
+                <div class="field-row">
+                  <div class="field">
+                    <label for="chosenStart-{{ r.id }}">Start date</label>
+                    <input id="chosenStart-{{ r.id }}" type="date"
+                      [min]="r.startDateFrom | date:'yyyy-MM-dd'"
+                      [max]="r.startDateTo | date:'yyyy-MM-dd'"
+                      formControlName="chosenStartDate" />
+                  </div>
+                  <div class="field">
+                    <label for="chosenEnd-{{ r.id }}">End date (optional)</label>
+                    <input id="chosenEnd-{{ r.id }}" type="date" formControlName="chosenEndDate" />
+                  </div>
+                </div>
+                @if (responseError()) { <div class="banner-error">{{ responseError() }}</div> }
+                <div class="hire-form-actions">
+                  <button type="submit" [disabled]="isResponding()">Confirm Accept</button>
+                  <button type="button" class="cancel-action" (click)="closeAction()">Cancel</button>
+                </div>
+              </form>
+            }
+
+            @if (openActionFor()?.id === r.id && !openActionFor()?.accept) {
+              <form [formGroup]="declineForm" (ngSubmit)="confirmDecline(r.id)" class="hire-form">
+                <div class="field">
+                  <label for="declineReason-{{ r.id }}">Reason (optional)</label>
+                  <textarea id="declineReason-{{ r.id }}" rows="2" formControlName="declineReason"></textarea>
+                </div>
+                @if (responseError()) { <div class="banner-error">{{ responseError() }}</div> }
+                <div class="hire-form-actions">
+                  <button type="submit" [disabled]="isResponding()">Confirm Decline</button>
+                  <button type="button" class="cancel-action" (click)="closeAction()">Cancel</button>
+                </div>
+              </form>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>
