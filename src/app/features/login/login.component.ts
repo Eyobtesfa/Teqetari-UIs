@@ -5,6 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ApiErrorResponse } from '../../Models/auth.model';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,8 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  private notificationService = inject(NotificationService);
 
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -44,7 +47,8 @@ export class LoginComponent {
         next: () => {
           this.isSubmitting.set(false);
           const userType = this.authService.getUserType();
-          this.router.navigate([userType === 'Employer' ? '/employer-dash' : '/employee-dash']);
+          this.notificationService.connect();
+          this.router.navigate([userType === 'EMPLOYER' ? '/employer-dash' : '/employee-dash']);
         },
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);

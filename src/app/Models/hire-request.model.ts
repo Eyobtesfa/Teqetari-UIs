@@ -7,9 +7,9 @@ export interface CreateHireRequest{
 }
 
 export enum HireRequestStatus {
-  Pending = 1,
-  Accepted = 2,
-  Declined = 3,
+  Pending = 'Pending',
+  Accepted = 'Accepted',
+  Declined = 'Declined',
 }
 
 export interface HireRequestResponse{

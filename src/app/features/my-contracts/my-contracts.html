@@ -1,0 +1,30 @@
+<div class="contracts-page">
+  <div class="auth-card">
+    <h1>My placement contracts</h1>
+
+    @if (isLoading()) {
+      <p class="placeholder-text">Loading…</p>
+    } @else if (contracts().length === 0) {
+      <p class="placeholder-text">No contracts yet.</p>
+    } @else {
+      <ul class="job-list">
+        @for (c of contracts(); track c.id) {
+          <li>
+            <div class="job-info">
+              <strong>Contract #{{ c.id }} — {{ c.isActive ? 'Active' : 'Ended' }}</strong>
+              <span class="job-meta">Employer: {{ c.employer.email }} · {{ c.employer.city }}</span>
+              <span class="job-meta">Employee: {{ c.employee.firstName }} {{ c.employee.lastName }}</span>
+              <span class="job-meta">{{ c.startDate | date }} – {{ c.endDate ? (c.endDate | date) : 'Open-ended' }} · {{ c.salary }} ETB</span>
+            </div>
+            <div class="action-buttons">
+              <a [routerLink]="['/placement-contract', c.id]"><button type="button" class="secondary-action">View / Download</button></a>
+              @if (c.isActive) {
+                <button type="button" class="cancel-action" (click)="cancel(c.id)">Cancel Contract</button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>

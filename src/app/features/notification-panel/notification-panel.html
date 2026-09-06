@@ -1,0 +1,16 @@
+<!-- notification-panel.component.html -->
+@if (notificationService.notifications().length > 0) {
+  <div class="notification-panel">
+    @for (n of notificationService.notifications(); track n.id) {
+      <div class="notification-item">
+        <span>{{ n.message }}</span>
+        <div class="notification-actions">
+          @if (n.relatedContractId) {
+            <a [routerLink]="['/placement-contract', n.relatedContractId]">View</a>
+          }
+          <button type="button" (click)="notificationService.dismiss(n.id)">×</button>
+        </div>
+      </div>
+    }
+  </div>
+}

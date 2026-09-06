@@ -202,3 +202,42 @@ a{text-decoration:none;color:inherit;}
   .auth-card > .dashboard-section:nth-of-type(1){grid-column:1;grid-row:4;}
   .auth-card > .dashboard-section:nth-of-type(2){grid-column:1;grid-row:5;margin-top:20px;}
 }
+
+.toast {
+  max-width: 720px;
+  margin: 1rem auto 0;
+  padding: 0.85rem 1.25rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  gap: 1rem;
+}
+
+.toast-success {
+  background: #eaf6ee;
+  color: #245a3f;
+  border: 1px solid #b9dfc4;
+}
+
+.toast-error {
+  background: #fdecea;
+  color: #b3261e;
+  border: 1px solid #f3c2bd;
+}
+
+.toast a {
+  font-weight: 600;
+  color: inherit;
+  text-decoration: underline;
+}
+
+.toast button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: inherit;
+  line-height: 1;
+}

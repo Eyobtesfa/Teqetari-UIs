@@ -65,7 +65,7 @@ export const routes: Routes = [
   loadComponent: () => import('./features/browse-employers/browse-employers').then(m => m.BrowseEmployersComponent),
 },
 {
-  path: 'browse-jobs',
+  path: 'browse-job',
   canActivate: [authGuard],
   loadComponent: () => import('./features/browse-job/browse-job').then(m => m.BrowseJobsComponent),
 },
@@ -76,6 +76,19 @@ export const routes: Routes = [
     import('./features/employee-dash/employee-dash').then(
       (m) => m.EmployeeDashboardComponent
     ),
+},
+{
+  path: 'placement-contract/:id',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/placement-contract/placement-contract.component').then(
+      (m) => m.PlacementContractComponent
+    ),
+},
+{
+  path: 'my-contracts',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/my-contracts/my-contracts').then(m => m.MyContractsComponent),
 },
   {
    path: '**', redirectTo: 'landing'

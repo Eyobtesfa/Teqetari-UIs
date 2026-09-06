@@ -1,4 +1,6 @@
 <div class="dashboard-page">
+  <app-notification-panel></app-notification-panel>
+
   <div class="auth-card">
     <h1>Employer dashboard</h1>
     <p class="subtitle">Manage your job postings and candidates.</p>
@@ -7,9 +9,11 @@
       <a routerLink="/job-post">
         <button type="button" class="primary-action">+ Post a Job</button>
       </a>
+      <a routerLink="/my-contracts">
+        <button type="button" class="primary-action">My Contracts</button>
+      </a>
     </div>
 
-    <!-- Placeholder sections — wire these up as those features are built -->
     <div class="dashboard-section">
       <h2>Your postings</h2>
 

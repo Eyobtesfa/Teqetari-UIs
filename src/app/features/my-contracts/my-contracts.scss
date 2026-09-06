@@ -1,0 +1,156 @@
+:host{
+  --bg:#FAF6EC;
+  --ink:#16241F;
+  --ink-soft:#4A564F;
+  --ink-faint:#8B958F;
+  --teal:#0B5D52;
+  --coral:#DE5A34;
+  --white:#FFFFFF;
+  --line: rgba(22,36,31,0.1);
+
+  display:block;
+  font-family:'Manrope',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  color:var(--ink);
+}
+
+*{box-sizing:border-box;}
+a{text-decoration:none;color:inherit;}
+
+/* ---------- page shell ---------- */
+.contracts-page{
+  min-height:100vh;
+  background:var(--bg);
+  padding:clamp(28px, 4vw, 56px) clamp(20px, 4vw, 48px) 64px;
+}
+
+.auth-card{
+  max-width:900px;
+  margin:0 auto;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:clamp(28px, 3vw, 40px) clamp(24px, 3vw, 40px) clamp(36px, 3vw, 44px);
+  box-shadow:0 20px 48px rgba(22,36,31,0.07);
+}
+
+.auth-card h1{
+  font-family:'Fraunces',serif;
+  font-weight:500;
+  font-size:clamp(24px, 2.2vw, 29px);
+  letter-spacing:-0.01em;
+  margin:0 0 24px;
+  color:var(--ink);
+}
+
+/* ---------- list ---------- */
+.job-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.job-list > li{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-left:3px solid var(--ink-faint);
+  border-radius:14px;
+  padding:16px 18px;
+  transition:border-color .15s ease;
+}
+/* the Cancel Contract button only renders when c.isActive is true —
+   used here to mark active contracts without a new template class */
+.job-list > li:has(.cancel-action){
+  border-left-color:var(--teal);
+}
+.job-list > li:hover{border-color:rgba(11,93,82,0.22);}
+
+.job-info{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  min-width:0;
+}
+.job-info strong{
+  font-size:14.5px;
+  font-weight:600;
+  color:var(--ink);
+}
+.job-meta{
+  font-size:12.5px;
+  color:var(--ink-soft);
+}
+
+/* ---------- actions ---------- */
+.action-buttons{
+  flex:none;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:8px;
+}
+.secondary-action{
+  appearance:none;
+  border:1.5px solid var(--teal);
+  cursor:pointer;
+  height:36px;
+  padding:0 16px;
+  border-radius:999px;
+  background:var(--white);
+  color:var(--teal);
+  font-family:'Manrope',sans-serif;
+  font-weight:600;
+  font-size:13px;
+  white-space:nowrap;
+  transition:background .16s ease, color .16s ease, transform .16s ease;
+}
+.secondary-action:hover{
+  background:var(--teal);
+  color:var(--white);
+  transform:translateY(-1px);
+}
+
+.cancel-action{
+  appearance:none;
+  border:1.5px solid var(--line);
+  cursor:pointer;
+  height:36px;
+  padding:0 16px;
+  border-radius:999px;
+  background:var(--white);
+  color:var(--ink-soft);
+  font-family:'Manrope',sans-serif;
+  font-weight:600;
+  font-size:13px;
+  white-space:nowrap;
+  transition:border-color .16s ease, color .16s ease;
+}
+.cancel-action:hover{
+  border-color:var(--coral);
+  color:var(--coral);
+}
+
+/* ---------- placeholder / empty / loading states ---------- */
+.placeholder-text{
+  font-size:14px;
+  color:var(--ink-faint);
+  text-align:center;
+  padding:28px 10px;
+  margin:0;
+  border:1.5px dashed var(--line);
+  border-radius:12px;
+  background:var(--bg);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:560px){
+  .job-list > li{flex-direction:column;align-items:stretch;}
+  .action-buttons{flex-direction:row;}
+  .secondary-action, .cancel-action{flex:1;}
+}
