@@ -90,6 +90,11 @@ export const routes: Routes = [
   canActivate: [authGuard],
   loadComponent: () => import('./features/my-contracts/my-contracts').then(m => m.MyContractsComponent),
 },
+{
+  path: 'employer-jobs/:id',
+  canActivate: [authGuard],
+  loadComponent: () => import('./features/employer-jobs/employer-jobs').then(m => m.EmployerJobsComponent),
+},
   {
    path: '**', redirectTo: 'landing'
   },

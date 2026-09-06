@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { EmployerService } from '../../services/employer';
 import { EmployerResponse } from '../../Models/employer.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-browse-employers',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './browse-employers.html',
   styleUrl: './browse-employers.scss',
 })

@@ -32,6 +32,90 @@
               <span class="job-status">
                 Expires {{ job.expirationDate | date: 'mediumDate' }}
               </span>
+
+              <div class="action-buttons">
+                <button type="button" class="secondary-action" (click)="toggleApplicants(job.id)">
+                  {{ openApplicantsForJobId() === job.id ? 'Hide applicants' : 'View applicants' }}
+                </button>
+              </div>
+
+              @if (openApplicantsForJobId() === job.id) {
+                <div class="applicants-panel">
+                  @if (isLoadingApplicants()) {
+                    <p class="placeholder-text">Loading…</p>
+                  } @else if (applicants().length === 0) {
+                    <p class="placeholder-text">No applications yet.</p>
+                  } @else {
+                    <ul class="job-list">
+                      @for (a of applicants(); track a.id) {
+                        <li class="request-row">
+                          <div class="job-info">
+  <strong>{{ a.employeeFirstName }} {{ a.employeeLastName }}</strong>
+  <span class="job-meta">
+    {{ jobCategoryLabel(a.employeeJobCategory) }}
+    @if (a.employeeYearsOfExperience !== null) { · {{ a.employeeYearsOfExperience }} yrs exp }
+    @if (a.employeeCity) { · {{ a.employeeCity }} }
+  </span>
+  @if (a.employeeExpectedSalary !== null) {
+    <span class="job-meta">Expects {{ a.employeeExpectedSalary }} ETB</span>
+  }
+  
+  @if (a.coverLetter) { <span class="job-meta">"{{ a.coverLetter }}"</span> }
+  <span class="job-meta">Applied {{ a.appliedAt | date }}</span>
+</div>
+
+                          @if (a.status === ApplicationStatus.Pending) {
+                            <div class="action-buttons">
+                              <button type="button" class="secondary-action" (click)="openAccept(a.id)">Accept</button>
+                              <button type="button" class="cancel-action" (click)="openDecline(a.id)">Decline</button>
+                            </div>
+                          } @else {
+                            <span class="status-badge">{{ a.status === ApplicationStatus.Accepted ? 'Accepted' : 'Declined' }}</span>
+                          }
+
+                          @if (openActionFor()?.id === a.id && openActionFor()?.accept) {
+                            <form [formGroup]="acceptForm" (ngSubmit)="confirmAccept(a.id, job.id)" class="hire-form">
+                              <div class="field-row">
+                                <div class="field">
+                                  <label for="chosenStart-{{ a.id }}">Start date</label>
+                                  <input id="chosenStart-{{ a.id }}" type="date" formControlName="chosenStartDate" />
+                                </div>
+                                <div class="field">
+                                  <label for="chosenEnd-{{ a.id }}">End date (optional)</label>
+                                  <input id="chosenEnd-{{ a.id }}" type="date" formControlName="chosenEndDate" />
+                                </div>
+                                <div class="field">
+  <label for="agreedSalary-{{ a.id }}">Agreed salary (optional)</label>
+  <input id="agreedSalary-{{ a.id }}" type="number" formControlName="agreedSalary" />
+</div>
+                              </div>
+                              @if (responseError()) { <div class="banner-error">{{ responseError() }}</div> }
+                              <div class="hire-form-actions">
+                                <button type="submit" [disabled]="isResponding()">Confirm Accept</button>
+                                <button type="button" class="cancel-action" (click)="closeAction()">Cancel</button>
+                              </div>
+                            </form>
+                          }
+
+                          @if (openActionFor()?.id === a.id && !openActionFor()?.accept) {
+                            <form [formGroup]="declineForm" (ngSubmit)="confirmDecline(a.id, job.id)" class="hire-form">
+                              <div class="field">
+                                <label for="declineReason-{{ a.id }}">Reason (optional)</label>
+                                <textarea id="declineReason-{{ a.id }}" rows="2" formControlName="declineReason"></textarea>
+                              </div>
+                              @if (responseError()) { <div class="banner-error">{{ responseError() }}</div> }
+                              <div class="hire-form-actions">
+                                <button type="submit" [disabled]="isResponding()">Confirm Decline</button>
+                                <button type="button" class="cancel-action" (click)="closeAction()">Cancel</button>
+                              </div>
+                            </form>
+                          }
+                        </li>
+                      }
+                    </ul>
+                  }
+                </div>
+              }
             </li>
           }
         </ul>

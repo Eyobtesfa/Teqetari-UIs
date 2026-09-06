@@ -1,0 +1,68 @@
+<nav class="app-nav">
+  <div class="nav-inner">
+    <a [routerLink]="[homePath]" class="nav-brand" (click)="closeMobileMenu()">
+      Teqetari
+    </a>
+
+    @if (isAuthenticated) {
+      <ul class="nav-links">
+        @for (link of links; track link.path) {
+          <li>
+            <a
+              [routerLink]="[link.path]"
+              routerLinkActive="active"
+              class="nav-link"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+        }
+      </ul>
+
+      <div class="nav-actions">
+        <span class="role-badge">{{ userType }}</span>
+        <button type="button" class="nav-logout" (click)="logout()">Log out</button>
+      </div>
+
+      <button
+        type="button"
+        class="nav-burger"
+        [class.open]="isMobileMenuOpen()"
+        (click)="toggleMobileMenu()"
+        aria-label="Toggle menu"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    } @else {
+      <div class="nav-actions">
+        <a routerLink="/login" class="nav-link">Log in</a>
+        <a routerLink="/register/employee">
+          <button type="button" class="nav-cta secondary">Register as Employee</button>
+        </a>
+        <a routerLink="/register/employer">
+          <button type="button" class="nav-cta primary">Register as Employer</button>
+        </a>
+      </div>
+    }
+  </div>
+
+  @if (isAuthenticated && isMobileMenuOpen()) {
+    <div class="nav-mobile-panel">
+      <ul class="nav-links-mobile">
+        @for (link of links; track link.path) {
+          <li>
+            <a
+              [routerLink]="[link.path]"
+              routerLinkActive="active"
+              class="nav-link-mobile"
+              (click)="closeMobileMenu()"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+        }
+      </ul>
+      <button type="button" class="nav-logout-mobile" (click)="logout()">Log out</button>
+    </div>
+  }
+</nav>

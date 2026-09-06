@@ -1,11 +1,11 @@
 <div class="browse-page">
   <div class="auth-card">
-    <h1>Browse job postings</h1>
+    <h1>Job postings</h1>
 
     @if (isLoading()) {
       <p class="placeholder-text">Loading…</p>
     } @else if (jobs().length === 0) {
-      <p class="placeholder-text">No open job postings right now.</p>
+      <p class="placeholder-text">This employer has no open postings.</p>
     } @else {
       <ul class="job-list">
         @for (job of jobs(); track job.id) {
@@ -14,7 +14,6 @@
               <div class="job-info">
                 <strong>{{ job.title }}</strong>
                 <span class="job-meta">{{ job.location }} · {{ job.offeredSalaryMin }}–{{ job.offeredSalaryMax }} ETB</span>
-                <span class="job-meta">Expires {{ job.expirationDate | date: 'mediumDate' }}</span>
               </div>
 
               @if (appliedTo().has(job.id)) {

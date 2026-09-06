@@ -15,6 +15,9 @@
               <span class="job-meta">{{ e.$type }} · {{ e.city }}, {{ e.subCity }}</span>
               <span class="job-meta">{{ e.jobPostsCount }} job posting(s) · {{ e.placementContractsCount }} placement(s)</span>
             </div>
+            <a [routerLink]="['/employer-jobs', e.id]">
+    <button type="button" class="secondary-action">View Jobs</button>
+  </a>
           </li>
         }
       </ul>
