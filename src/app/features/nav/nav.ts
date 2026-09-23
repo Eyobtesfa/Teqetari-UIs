@@ -32,7 +32,7 @@ export class NavComponent {
   readonly employeeLinks: NavLink[] = [
     { path: '/employee-dash', label: 'Dashboard' },
     { path: '/browse-employers', label: 'Browse Employers' },
-    { path: '/browse-jobs', label: 'Browse Jobs' },
+    { path: '/browse-job', label: 'Browse Jobs' },
     { path: '/received-requests', label: 'Received Requests' },
     { path: '/my-contracts', label: 'My Contracts' },
   ];
@@ -69,5 +69,8 @@ export class NavComponent {
     this.authService.logout();
     this.closeMobileMenu();
     this.router.navigate(['/login']);
+  }
+  ngOnInit(): void {
+    console.log('userType:', this.authService.getUserType());
   }
 }
